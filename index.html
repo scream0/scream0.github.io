@@ -1,490 +1,195 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html>
-<HTML>
-<head>
-<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xar project</title>
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- custom styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- feather icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
 
-<title>Scream0</title>
-<style type='text/css'>
-/*---------------------------------------------
-Name		: Scream0 CSS PROJECT
-Author		: Karim M
-E-mail		: cimohcihui@gmail.com / karim.muhaimin7@gmail.com
-language	: Indonesia and English
----------*/
-:root {
---default-font-color: #f5f5f5;
---default-bg-color: #ffffff;
---default-bg-color-image:linear-gradient(260deg, #23ae76 0%, #006ecf 100%);
---kontrol-formulir-font-color: #666666;
---kontrol-formulir-bg-color: #f5f5f5;
---bg-header-color: #3284ef;
---bg-bodi-color: #fdfdfd;
---bg-footer-color: #34495e;
---bg-merah: #ff3284;
---bg-kuning: #ff8432;
---bg-hijau: #84ff32;
---bg-alert-info: #007a00;
---bg-alert-error: #c50000;
---bg-alert-sukses: #0000c5;
---bg-legend: #3284ff;
---bg-menu-baris: #efefef;
---bg-menu-baris-menucolor: #ff3424;
---link-color: #00bbff;
---link-color-visited: #994cff;
---link-color-hover: #4c4cff;
---blok-text-color: #808080;
---blok-text-bgcolor: #e5e5e5;
---default-border-shadow-color: #cccccc;
---border-wrapper-color: 1px solid #23ae76;
---border-shadow-color: #00933b;
---border-shadow-color-focus: #26b14c;
---pre-code-font-color: #40bfbf;
---pre-code-bg-color: #292e34;
---pre-code-border-color: #2fbb00;
---custom-radio-checkbox-checkmark-color: #26b144;
---modal-bgcolor: #009900;
---tomboldefault-bgcolor: #eeeeee;
-}
+  <body>
+    <!-- navbar start -->
+    <nav class="navbar">
+      <a href="#" class="logo">xar<span>project</span>.</a>
 
-[data-theme="dark"] {
---default-font-color: #ffffff;
---default-bg-color: #292e34;
---default-bg-color-image: linear-gradient(260deg, #290034 0%, #292e34 100%);
---kontrol-formulir-font-color: #f5f5f5;
---kontrol-formulir-bg-color: #292929;
---bg-header-color: #3e3e3e;
---bg-bodi-color: #2d2d2d;
---bg-footer-color: #34495e;
---bg-merah: #ff3284;
---bg-kuning: #ff8432;
---bg-hijau: #84ff32;
---bg-alert-info: #007a00;
---bg-alert-error: #c50000;
---bg-alert-sukses: #0000c5;
---bg-legend: #3284ff;
---bg-menu-baris: #f4f4f4;
---bg-menu-baris-menucolor: #ff3424;
---link-color: #00bbff;
---link-color-visited: #994cff;
---link-color-hover: #4c4cff;
---blok-text-color: #efef90;
---blok-text-bgcolor: #4e4e4e;
---default-border-shadow-color: #cccccc;
---border-wrapper-color:1px solid #230D34;
---border-shadow-color: #2196fa;
---border-shadow-color-focus: #2196ff;
---pre-code-font-color: #40bfbf;
---pre-code-bg-color: #292e34;
---pre-code--border-color: #2fbb00;
---custom-radio-checkbox-checkmark-color: #2196f3;
---modal-bgcolor: #003e00;
---tomboldefault-bgcolor: #808080;
-}
+      <div class="navbar-nav">
+        <a href="#home">Home</a>
+        <a href="#about">Tentang Kami</a>
+        <a href="#product">Produk</a>
+        <a href="#contact">Kontak</a>
+      </div>
 
+      <div class="navbar-extra">
+        <a href="#" id="search" class="search-icon">
+          <i data-feather="search"></i>
+        </a>
+        <a href="#" id="cart" class="cart-icon">
+          <i data-feather="shopping-cart"></i>
+        </a>
+        <a  id="hamburger" class="hamburger">
+          <i data-feather="menu"></i>
+        </a>
+      </div>
+    </nav>
+    <!-- navbar end -->
 
-*
-{
-	margin : 0;
-	-webkit-box-sizing : border-box;
-	-moz-box-sizing : border-box;
-	box-sizing : border-box;
-}
+    <!-- hero section -->
+    <section id="home" class="hero">
+      <main class="content">
+        <h1>Kami meracik setiap produk dengan <span>penuh perhatian</span></h1>
+        <p>
+          Kami menyediakan berbagai produk berkualitas untuk memenuhi kebutuhan
+          Anda. Jelajahi koleksi kami dan temukan apa yang Anda cari!
+        </p>
+        <a href="#product" class="cta">Lihat Produk</a>
+    </section>
+    <!-- hero section end -->
+<!-- about section -->
+    <section id="about" class="about">
+        <h2><span>Tentang</span> Kami</h2>
 
-*:before, *:after
-{
-	-webkit-box-sizing : border-box;
-	-moz-box-sizing : border-box;
-	box-sizing : border-box;
-}
+        <div class="row">
 
-html
-{
-	font-size : 15px;
-	-webkit-tap-highlight-color : rgba(0, 0, 0, 0);
-}
-
-body
-{
-	font-family : "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size : 15px;
-	line-height : 1.42857143;
-	color : var(--default-font-color);
-	background-color : var(--default-bg-color);
-	min-height : 250px;
-	background-image: var(--default-bg-color-image);
-	background-attachment : fixed;
-	background-position : center;
-	background-repeat : no repeat;
-	background-size : cover;
-	scrolling : no;
-	scrollbar : no;
-}
-
-
-
-/*------- Navigation ------*/
-        .navbar {
-            position: relative ;
-            min-height: 67px;
-            font-size: 18px;
-            background-image: var(--default-bg-color-image);
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            padding:10px 14px;
-        }
-
-        .main-nav {
-        font-size: 15px;
-        margin-top:70px;
-        text-align: right;
-            list-style-type: none;
-            display: none;
-        }
-
-        .nav-links,
-        .logo {
-        
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .main-nav li {
-            padding: 3px;
-            margin: 10px auto
-            
-        }
-
-        .navbar .logo {
-            display: inline-block;
-            float: left;
-            font-size: 22px;
-            text-align: center; 
-        
-        }
-
-
-       .navbar .toggler-navbar {
-        display: block;
-}    
-        .navbar .theme-switch-wrapper {
-            
-            float: right;
-            padding-right: 30px;
-            padding-top: 3px;
-            
-            
-            
-        }
-        .active {
-            display: block;
-        }
-        
-        /*----------- Hamburger menu ---------*/: 
-.hamburger-menu
-{
-	float : right;
-	padding : 2px 6px;
-	line-height : 1;
-	background-color : var(--bg-menu-baris);
-	border : 1px;
-	border-radius : 5px;
-	display : inline-block;
-	cursor : pointer;
-	    -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-    -webkit-transition: .5s ease-in-out;
-    -moz-transition: .5s ease-in-out;
-    -o-transition: .5s ease-in-out;
-    transition: .5s ease-in-out;
-    cursor: pointer;
-}
-
-
-.hamburger-menu span {
-    display: block;
-    position: absolute  ;
-    height: 3px;
-    width: 30px;
-    background: white;
-    border-radius: 9px;
-    opacity: 1;
-    margin-top: 10px;
-    right: 10px;
-    -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-    -webkit-transition: .25s ease-in-out;
-    -moz-transition: .25s ease-in-out;
-    -o-transition: .25s ease-in-out;
-    transition: .25s ease-in-out;
-}
-
-.hamburger-menu span:nth-child(1) {
-    top: 2.5px;
-}
-
-.hamburger-menu span:nth-child(2) {
-    top: 11px;
-}
-
-.hamburger-menu span:nth-child(3) {
-    top: 21px;
-}
-
-.hamburger-menu.open span:nth-child(1) {
-    top: 15px;
-    -webkit-transform: rotate(135deg);
-    -moz-transform: rotate(135deg);
-    -o-transform: rotate(135deg);
-    transform: rotate(135deg);
-}
-
-.hamburger-menu.open span:nth-child(2) {
-    opacity: 0;
-    left: -60px;
-}
-
-.hamburger-menu.open span:nth-child(3) {
-    top: 14px;
-    -webkit-transform: rotate(-135deg);
-    -moz-transform: rotate(-135deg);
-    -o-transform: rotate(-135deg);
-    transform: rotate(-135deg);
-}
-
-.
-
-/*---- wrapper toggle ganti tema----- */
-.theme-switch-wrapper {
-display: flex;
-align-items: center;
-
-em {
-margin-left: 10px;
-font-size: 1rem;
-}
-} 
-/*--- toogle switch slider --- */
-.theme-switch {
-  position: relative;
-  display: inline-block;
-  width: 32px;
-  height: 16px; 
-margin: 3px 6px;
-}
-
-.theme-switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 10px;
-  width: 10px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(16px);
-  -ms-transform: translateX(16px);
-  transform: translateX(16px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 10px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-      /*-------- wrapper atau pembungkus---------------------*/
-
-#outer-wrapper, #header-wrapper{background: transparent; width: 98%; padding: 3px; margin: 3px auto;}
-#sidebar-wrapper, #content-wrapper,#footer-wrapper { float:left;background: transparent; width: 100%;height:auto; margin: 3px auto; border:var(--border-wrapper-color);text-align: left;
-padding-left: 10px;
-        }
-/*-------- Biar layout tidak tumpang tindih -------*/
-.clearfix:after {visibility: hidden; display: block; font-size: 0; content: &quot; &quot;; clear: both; height: 0;}
-
-/*------------- Desktop atau Komputer ------------*/
-        @media screen and (min-width: 768px) {
-            .navbar {
-                display: flex;
-                justify-content: space-between;
-                padding-bottom: 0;
-                height: 70px;
-                align-items: center;
-            }
-
-            .main-nav {
-                display: flex;
-                margin-right: 30px;
-                flex-direction: row;
-                justify-content: flex-end;
-            }
-
-            .main-nav li {
-                margin-bottom: 70px ;
-            }
-
-            .nav-links {
-                margin-left: 40px;
-            }
-
-            .logo {
-                margin-top: 0;
-            }
-
-            .navbar .toggler-navbar {
-                display: none;
-            }
-
-            .logo:hover,
-            .nav-links:hover {
-                color: rgba(255, 255, 255, 1);
-            }
-            
-               /*-------- wrapper atau pembungkus---------------------*/
-
-#outer-wrapper {background: transparent  ; width: 90%; padding: 20px; margin: 20px auto;}
-#header-wrapper {background: transparent; width: 100%; height:auto; margin: 0 auto; }
-#sidebar-wrapper {background: transparent; width:30%; float:right; border: var(--border-wrapper-color); margin:10px 0;}
-#content-wrapper {background: transparent; width:65%; float:left; border: var(--border-wrapper-color); margin:10px 0;}
-#footer-wrapper {background:transparent; width:100%; border:var(--border-wrapper-color); margin:10px 0;}
-
-        }
-/*---------- End of Desktop ---------*/
-
-
-</style>
-</head>
-<body>
-<div id='outer-wrapper'>
-<div id='header-wrapper'>
-
-<nav class="navbar">
-<a href="#" class="logo">Scream0</a>
-
-<div class="theme-switch-wrapper">
-<label class="theme-switch" for="checkbox">
-<input type="checkbox" id="checkbox" />
-<div class="slider round"></div>
-</label>
-</div>
-
-  <div class="toggler-navbar">
-            <div class="hamburger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            
+          <div class="about-img">
+          <img src="img/bg-about.jpg" alt="Tentang Kami" />
         </div>
 
-        <ul class="main-nav" id="js-menu">
-            <li>
-                <a href="#" class="nav-links">Home</a>
-            </li>
-            <li>
-                <a href="#" class="nav-links">Products</a>
-            </li>
-            <li>
-                <a href="#" class="nav-links">About Us</a>
-            </li>
-            <li>
-                <a href="#" class="nav-links">Contact Us</a>
-            </li>
-            <li>
-                <a href="#" class="nav-links">Blog</a>
-            </li>
-        </ul>
-
-    </nav>
-    
+        <div class="content">
+          <h3>Kenapa Memilih Kami?
+             </h3>
+          <p>
+        Kami adalah tim yang berdedikasi untuk memberikan produk berkualitas tinggi
+            kepada pelanggan kami. Dengan pengalaman bertahun-tahun di industri ini,
+            kami berkomitmen untuk terus meningkatkan produk dan layanan kami untuk memenuhi kebutuhan Anda.
+         
+          </p>
+        </div>
 </div>
-<div class='clearfix'/>
+    </section>
+    <!-- about section end -->
 
-<div id='content-wrapper'>
-<p>Main Content</p>
+
+    <!-- product section start -->
+<section id="product" class="product">
+        <h2>Produk<span> Kami</span></h2>
+
+        <div class="row">
+          <div class="product-card">
+            <div class="product-image">
+              <img src="img/produk.jpg" alt="Extrait de Parfum" class=""product-card-img />
+            </div>
+            <h3 class="produk-card-title">Extrait de Parfum</h3>
+            <p class="produk-card-harga">IDR 149.000</p>
+            <a href="#" class="btn-luxury">Beli Sekarang</a>
+          </div>
+          <div class="product-card">
+            <div class="product-image">
+              <img src="img/produk.jpg" alt="Drip bag coffee" class=""product-card-img />
+            </div>
+            <h3 class="produk-card-title">Drip Bag Coffee</h3>
+            <p class="produk-card-harga">IDR 100.000</p>
+            <a href="#" class="btn-luxury">Beli Sekarang</a>
+          </div>
+          <div class="product-card">
+            <div class="product-image">
+              <img src="img/produk.jpg" alt="Drip bag coffee" class=""product-card-img />
+            </div>
+            <h3 class="produk-card-title">Drip Bag Coffee</h3>
+            <p class="produk-card-harga">IDR 100.000</p>
+            <a href="#" class="btn-luxury">Beli Sekarang</a>
+          </div>
+          <div class="product-card">
+            <div class="product-image">
+              <img src="img/produk.jpg" alt="Drip bag coffee" class=""product-card-img />
+            </div>
+            <h3 class="produk-card-title">Drip Bag Coffee</h3>
+            <p class="produk-card-harga">IDR 100.000</p>
+            <a href="#" class="btn-luxury">Beli Sekarang</a>
+          </div>
+
+       
+        </div>
+      </section>
+
+     <!-- product section end -->
+
+
+     <!-- contact section start -->
+
+     <section id="contact" class="contact">
+        <h2><span>Kontak</span> Kami</h2>
+
+        <div class="row">
+<iframe class="contact-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63245.97085681233!2d110.33355944996632!3d-7.803248449162962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5787bd5b6bc5%3A0x21723fd4d3684f71!2sYogyakarta%2C%20Kota%20Yogyakarta%2C%20Daerah%20Istimewa%20Yogyakarta!5e0!3m2!1sid!2sid!4v1779977655439!5m2!1sid!2sid"  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+<form action="" class="contact-form">
+
+          <div class="input-group ">
+            <i data-feather="user"></i>
+            <input type="text" placeholder="Nama" required />
+            
+          </div>
+          <div class="input-group">
+            <i data-feather="mail"></i>
+            <input type="email" placeholder="Email"  required />
+          </div>  
+           <div class="input-group">
+              <i data-feather="phone"></i>
+              <input type="tel" placeholder="Nomor Telepon"   required />
+            </div>
+            <div class="input-group">
+              <i data-feather="message-square"></i>
+              <textarea placeholder="Pesan"    required ></textarea>
+             
+            </div>
+
+              <button type="submit" class="btn-submit">Kirim Pesan</button>
+              <a href="https://wa.me/6285171723607" class="btn-luxury" target="_blank">Hubungi via WhatsApp</a>
+</form> 
+     
 </div>
-<div id='sidebar-wrapper'>
-<p>Sidebar</p>
-</div>
-<div class='clearfix'/>
-<div id='footer-wrapper'>
-   
-<p>Footer</p>
-</div>
-</div>
-<script type="text/javascript">
-document.getElementsByClassName('toggler-navbar')[0].addEventListener('click', toogleClass);
+    </section>
+    <!-- footer  -->
+     <footer>
+     <div class="footer-social">  
+      <a href="https://www.instagram.com/xarproject/" target="_blank" class="social-link">
+        <i data-feather="instagram"></i>
+      </a>
+      <a href="https://www.facebook.com/xarproject" target="_blank" class="social-link">
+        <i data-feather="facebook"></i> 
+      </a>
+      <a href="https://shopee.co.id/xarproject" target="_blank" class="social-link">
+        <i data-feather="shopping-bag"></i>
+      </a>
+      </div>
 
-function toogleClass() {
-    document.getElementsByClassName('hamburger-menu')[0].classList.toggle('open')
-    document.getElementsByClassName('main-nav')[0].classList.toggle('active')
-}
-b
+      <div class="footer-nav">
+        <a href="#home">Home</a>
+        <a href="#about">Tentang Kami</a>
+        <a href="#product">Produk</a>
+        <a href="#contact">Kontak</a>
+      </div>
 
-</script>
-<!-- toogle light/dark -->
-<script type='text/javascript'>
-
-const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
-const currentTheme = localStorage.getItem('theme');
-
-if (currentTheme) {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-  
-    if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
-    }
-}
-
-function switchTheme(e) {
-    if (e.target.checked) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-    }
-    else {        document.documentElement.setAttribute('data-theme', 'light');
-          localStorage.setItem('theme', 'light');
-    }    
-}
-
-toggleSwitch.addEventListener('change', switchTheme, false);
-
-
-</script>
-</body>
-</HTML>  
+      <div class="copyright">
+        <p>&copy; 2024 Xar Project. All rights reserved.</p>    
+        </div>
+    </footer>
+      <!-- contact section end -->
+    <!-- feather icons -->
+    <script>
+      feather.replace();
+    </script>
+    <!-- my javascript -->
+    <script src="js/script.js"></script>
+  </body>
+</html>
