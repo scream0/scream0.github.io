@@ -29,14 +29,35 @@
         <a href="#contact">Kontak</a>
       </div>
 
-      <div class="navbar-extra">
-        <a href="#" id="search" class="search-icon">
+ <!-- search form start -->
+        <div class="search-form">
+          <input type="search" id="search-box" placeholder="Cari produk..." />
+        <label for="search-box" class="search-icon">
+            <i data-feather="search"></i>
+          </label>
+        
+        </div>
+        <!-- search form end -->
+      <!-- shopping cart start -->
+       <div class="shopping-cart">
+          <div class="cart-item">
+            <img src="product/produk-1.jpg" alt="Extrait de Parfum" />
+            <div class="cart-item-details">
+              <h4>Extrait de Parfum</h4>
+              <div class="item-price">IDR 149K</div>
+              <i data-feather="trash-2" class="remove-item"></i>
+            </div>
+          </div>
+          </div>
+      <!-- shopping cart end -->
+        <div class="navbar-extra">
+        <a href="#" id="search-button" >
           <i data-feather="search"></i>
         </a>
-        <a href="#" id="cart" class="cart-icon">
+        <a href="#" id="cart-button" >
           <i data-feather="shopping-cart"></i>
         </a>
-        <a  id="hamburger" class="hamburger">
+        <a href="#" id="hamburger" >
           <i data-feather="menu"></i>
         </a>
       </div>
@@ -84,41 +105,66 @@
         <h2>Produk<span> Kami</span></h2>
 
         <div class="row">
-          <div class="product-card">
-            <div class="product-image">
-              <img src="img/produk.jpg" alt="Extrait de Parfum" class=""product-card-img />
+      
+            <div class="product-card">
+            <div class="product-icon">
+              <a href="#" class="all-cart">
+                <i data-feather="shopping-cart"></i>
+              </a>
+              <a href="#" class="view-details">
+                <i data-feather="eye"></i>
+              </a>
+              </div>
+              <div class="product-image">
+              <img src="product/produk-1.jpg" alt="Extrait de Parfum" />
+              </div>
+              <div class="product-content">
+              <h3>Extrait de Parfum</h3>
+              <div class="product-star">
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+              </div>
+              <div class="product-price">
+                IDR 149K <span>IDR 199K</span>
+              </div>
             </div>
-            <h3 class="produk-card-title">Extrait de Parfum</h3>
-            <p class="produk-card-harga">IDR 149.000</p>
-            <a href="#" class="btn-luxury">Beli Sekarang</a>
-          </div>
-          <div class="product-card">
-            <div class="product-image">
-              <img src="img/produk.jpg" alt="Drip bag coffee" class=""product-card-img />
-            </div>
-            <h3 class="produk-card-title">Drip Bag Coffee</h3>
-            <p class="produk-card-harga">IDR 100.000</p>
-            <a href="#" class="btn-luxury">Beli Sekarang</a>
-          </div>
-          <div class="product-card">
-            <div class="product-image">
-              <img src="img/produk.jpg" alt="Drip bag coffee" class=""product-card-img />
-            </div>
-            <h3 class="produk-card-title">Drip Bag Coffee</h3>
-            <p class="produk-card-harga">IDR 100.000</p>
-            <a href="#" class="btn-luxury">Beli Sekarang</a>
-          </div>
-          <div class="product-card">
-            <div class="product-image">
-              <img src="img/produk.jpg" alt="Drip bag coffee" class=""product-card-img />
-            </div>
-            <h3 class="produk-card-title">Drip Bag Coffee</h3>
-            <p class="produk-card-harga">IDR 100.000</p>
-            <a href="#" class="btn-luxury">Beli Sekarang</a>
-          </div>
+     
 
-       
         </div>
+              <div class="product-card">
+            <div class="product-icon">
+              <a href="#" class="all-cart"> 
+                <i data-feather="shopping-cart"></i>
+              </a>
+              <a href="#" class="view-details">
+                <i data-feather="eye"></i>
+              </a>
+              </div>
+              <div class="product-image">
+              <img src="product/produk-2.jpg" alt="Drip Bag Coffee" />
+              </div>
+              <div class="product-content">
+              <h3>Drip Bag Coffee</h3>
+              <div class="product-star">
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+              </div>
+              <div class="product-price">
+                IDR 49K <span>IDR 79K</span>
+              </div>
+            </div>
+     
+
+        </div>
+        </div>  
+        
+        
       </section>
 
      <!-- product section end -->
@@ -159,7 +205,7 @@
      
 </div>
     </section>
-    <!-- footer  -->
+    <!-- footer start -->
      <footer>
      <div class="footer-social">  
       <a href="https://www.instagram.com/xarproject/" target="_blank" class="social-link">
@@ -184,7 +230,41 @@
         <p>&copy; 2024 Xar Project. All rights reserved.</p>    
         </div>
     </footer>
-      <!-- contact section end -->
+      <!-- footer end -->
+       <!-- modal box start -->
+        <div class="modal" id="item-detail-modal">
+       
+          <div class="modal-container">
+               <a href="#" class="modal-close">
+            <i data-feather="x"></i>
+          </a>
+           
+            <div class="modal-content">
+               <div class="modal-image">
+              <img src="product/produk-1.jpg" alt="Extrait de Parfum" />
+            </div>
+              <div class="modal-details">
+              <h3>Extrait de Parfum</h3>
+              <p>
+                Extrait de Parfum adalah konssentrasi parfum tertinggi yang menawarkan aroma yang intens dan tahan lama. Dengan kandungan minyak wangi yang lebih tinggi, Extrait de Parfum memberikan pengalaman aroma yang kaya dan mendalam, cocok untuk mereka yang menginginkan keharuman yang kuat dan tahan lama sepanjang hari.
+              </p>
+              <div class="product-star">
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+                <i data-feather="star" class="filled"></i>
+              </div>
+              <div class="product-price">
+                IDR 49K <span>IDR 79K</span>
+              </div>
+              <a href="#" class="btn-add-to-cart"><i data-feather="shopping-cart"></i><span> Tambah ke keranjang</span></a>
+
+            </div>
+          </div>
+        </div>
+        </div>
+        <!-- modal box end -->
     <!-- feather icons -->
     <script>
       feather.replace();
@@ -192,4 +272,7 @@
     <!-- my javascript -->
     <script src="js/script.js"></script>
   </body>
+
+
+
 </html>
