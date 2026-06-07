@@ -15,11 +15,15 @@
     <link rel="stylesheet" href="css/style.css" />
     <!-- feather icons -->
     <script src="https://unpkg.com/feather-icons"></script>
+    <!-- alpine.js -->
+   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"></script>
+     <!--app.js  -->
+   <script src="js/app.js"></script>
   </head>
 
   <body>
     <!-- navbar start -->
-    <nav class="navbar">
+    <nav class="navbar" x-data>
       <a href="#" class="logo">xar<span>project</span>.</a>
 
       <div class="navbar-nav">
@@ -41,21 +45,22 @@
       <!-- shopping cart start -->
        <div class="shopping-cart">
           <div class="cart-item">
-            <img src="product/produk-1.jpg" alt="Extrait de Parfum" />
+            <img src="assets/produk/crush.jpg" alt="Extrait de Parfum" />
             <div class="cart-item-details">
               <h4>Extrait de Parfum</h4>
               <div class="item-price">IDR 149K</div>
-              <i data-feather="trash-2" class="remove-item"></i>
-            </div>
+               </div>
           </div>
           </div>
       <!-- shopping cart end -->
         <div class="navbar-extra">
         <a href="#" id="search-button" >
-          <i data-feather="search"></i>
+            <i data-feather="search"></i>
+  
         </a>
         <a href="#" id="cart-button" >
           <i data-feather="shopping-cart"></i>
+         <span class="cart-count" x-show="$store.cart.quantity > 0" x-text="$store.cart.quantity"></span> 
         </a>
         <a href="#" id="hamburger" >
           <i data-feather="menu"></i>
@@ -82,7 +87,7 @@
         <div class="row">
 
           <div class="about-img">
-          <img src="img/bg-about.jpg" alt="Tentang Kami" />
+          <img src="assets/background/bg-about.jpg" alt="Tentang Kami" />
         </div>
 
         <div class="content">
@@ -101,25 +106,27 @@
 
 
     <!-- product section start -->
-<section id="product" class="product">
+<section id="product" class="product" x-data="listProducts">
         <h2>Produk<span> Kami</span></h2>
 
         <div class="row">
-      
+          <template x-for="(item, index) in items" x-key="index">
             <div class="product-card">
             <div class="product-icon">
-              <a href="#" class="all-cart">
-                <i data-feather="shopping-cart"></i>
-              </a>
+              <a href="#" @click.prevent="$store.cart.add(item)" class="all-cart">
+<svg class="feather">
+  <use href="assets/icon/feather-sprite.svg#shopping-cart" />
+</svg></a>
               <a href="#" class="view-details">
-                <i data-feather="eye"></i>
-              </a>
+<svg class="feather">
+  <use href="assets/icon/feather-sprite.svg#eye" />
+</svg></a>
               </div>
               <div class="product-image">
-              <img src="product/produk-1.jpg" alt="Extrait de Parfum" />
+              <img :src="`assets/produk/${item.image}`" :alt="item.name" />
               </div>
               <div class="product-content">
-              <h3>Extrait de Parfum</h3>
+              <h3 x-text="item.name"></h3>
               <div class="product-star">
                 <i data-feather="star" class="filled"></i>
                 <i data-feather="star" class="filled"></i>
@@ -128,40 +135,14 @@
                 <i data-feather="star" class="filled"></i>
               </div>
               <div class="product-price">
-                IDR 149K <span>IDR 199K</span>
+                <i x-text="formatRupiah(item.price)" class="current-price"></i> <span x-text="formatRupiah(item.originalPrice)" class="original-price"></span>
               </div>
             </div>
      
 
-        </div>
-              <div class="product-card">
-            <div class="product-icon">
-              <a href="#" class="all-cart"> 
-                <i data-feather="shopping-cart"></i>
-              </a>
-              <a href="#" class="view-details">
-                <i data-feather="eye"></i>
-              </a>
-              </div>
-              <div class="product-image">
-              <img src="product/produk-2.jpg" alt="Drip Bag Coffee" />
-              </div>
-              <div class="product-content">
-              <h3>Drip Bag Coffee</h3>
-              <div class="product-star">
-                <i data-feather="star" class="filled"></i>
-                <i data-feather="star" class="filled"></i>
-                <i data-feather="star" class="filled"></i>
-                <i data-feather="star" class="filled"></i>
-                <i data-feather="star" class="filled"></i>
-              </div>
-              <div class="product-price">
-                IDR 49K <span>IDR 79K</span>
-              </div>
-            </div>
-     
-
-        </div>
+          </template>
+      </div> 
+          
         </div>  
         
         
@@ -193,11 +174,7 @@
               <i data-feather="phone"></i>
               <input type="tel" placeholder="Nomor Telepon"   required />
             </div>
-            <div class="input-group">
-              <i data-feather="message-square"></i>
-              <textarea placeholder="Pesan"    required ></textarea>
-             
-            </div>
+          
 
               <button type="submit" class="btn-submit">Kirim Pesan</button>
               <a href="https://wa.me/6285171723607" class="btn-luxury" target="_blank">Hubungi via WhatsApp</a>
@@ -241,13 +218,11 @@
            
             <div class="modal-content">
                <div class="modal-image">
-              <img src="product/produk-1.jpg" alt="Extrait de Parfum" />
+              <img :src="${item.image}" alt="${item.name}" />
             </div>
               <div class="modal-details">
-              <h3>Extrait de Parfum</h3>
-              <p>
-                Extrait de Parfum adalah konssentrasi parfum tertinggi yang menawarkan aroma yang intens dan tahan lama. Dengan kandungan minyak wangi yang lebih tinggi, Extrait de Parfum memberikan pengalaman aroma yang kaya dan mendalam, cocok untuk mereka yang menginginkan keharuman yang kuat dan tahan lama sepanjang hari.
-              </p>
+              <h3 x-text="item.name"></h3>
+              <p x-text="item.description"></p>
               <div class="product-star">
                 <i data-feather="star" class="filled"></i>
                 <i data-feather="star" class="filled"></i>
@@ -256,7 +231,8 @@
                 <i data-feather="star" class="filled"></i>
               </div>
               <div class="product-price">
-                IDR 49K <span>IDR 79K</span>
+                <i x-text="item.price" class="current-price"></i>
+                <span class="original-price" x-text="item.originalPrice"></span>
               </div>
               <a href="#" class="btn-add-to-cart"><i data-feather="shopping-cart"></i><span> Tambah ke keranjang</span></a>
 

@@ -11,6 +11,8 @@
   --border-shadow-color-default: #cccccc;
   --border-shadow-color: #2196fa;
   --border-shadow-color-focus: #2196ff;
+  --bg-hero: url("../assets/background/bg-header.jpg");
+  --bg-about: url("../assets/background/bg-about.jpg");
 }
 
 html {
@@ -33,6 +35,17 @@ body {
   line-height: 1.6;
 }
 
+/* svg icon */
+.feather {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
 /* Efek Glassmorphism pada Navbar */
 .navbar {
   display: flex;
@@ -52,7 +65,7 @@ body {
 .navbar .logo {
   font-family: var(--font-serif);
   font-size: 2.1rem;
-  color: white;
+  color: var(--text-light);
   letter-spacing: 2px;
   font-weight: 700;
 }
@@ -62,7 +75,7 @@ body {
 }
 
 .navbar .navbar-nav a {
-  color: white;
+  color: var(--text-light);
   display: inline-block;
   font-size: 1rem;
   margin-left: 2rem;
@@ -85,7 +98,7 @@ body {
 }
 
 .navbar .navbar-extra a {
-  color: white;
+  color: var(--text-light);
   margin: 0 0.5rem;
 }
 
@@ -104,7 +117,7 @@ body {
   position: absolute;
   top: 100%;
   right: 7%;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--bg-light);
   display: flex;
   align-items: center;
   width: 50rem;
@@ -125,6 +138,25 @@ body {
   padding: 0 1.4rem;
   color: var(--text-dark);
   background-color: var(--bg-dark);
+}
+
+#cart-button {
+  position: relative;
+}
+
+#cart-button .cart-count {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  position: absolute;
+  background-color: red;
+  color: var(--text-light);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  top: 0.2rem;
+  right: -0.5rem;
+  transition: all 0.3s ease;
+  justify-content: center;
+  align-items: center;
 }
 
 .shopping-cart.active {
@@ -195,7 +227,7 @@ body {
   height: 100vh;
   display: flex;
   align-items: center;
-  background-image: url("../img/bg-header.jpg");
+  background-image: var(--bg-hero);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -355,18 +387,18 @@ body {
   width: 4rem;
   height: 4rem;
   margin: 0.5rem;
-  color: var(--text-dark);
   border-radius: 50%;
   border: 1px solid var(--border-shadow-color-default);
-  background-color: var(--primary-color);
   display: inline-flex;
   align-items: center;
+  color: var(--text-dark);
+  background-color: var(--primary-color);
   justify-content: center;
 }
 
 .product .product-icon a:hover {
-  color: var(--primary-color);
   border-color: var(--primary-color);
+  color: var(--text-light);
   background-color: transparent;
 }
 
@@ -387,16 +419,16 @@ body {
   letter-spacing: 2px;
   font-weight: 700;
 }
-.product .product-price {
+.product .product-price .current-price {
   font-size: 1.2rem;
   color: var(--text-light);
   margin-top: 0.5rem;
   font-weight: bold;
 }
-.product .product-price span {
+.product .product-price .original-price {
   text-decoration: line-through;
   font-size: 1rem;
-  color: var(--text-);
+  color: var(--text-muted);
   margin-left: 0.5rem;
   font-weight: lighter;
 }
@@ -428,7 +460,6 @@ body {
 
 .contact .row {
   display: flex;
-
   gap: 2rem;
 }
 
@@ -609,16 +640,16 @@ footer .copyright {
   margin-top: 0.5rem;
   fill: var(--primary-color);
 }
-.modal-content .product-price {
+.modal-content .product-price .current-price {
   font-size: 1.2rem;
   color: var(--text-light);
   margin-top: 0.5rem;
   font-weight: bold;
 }
-.modal-content .product-price span {
+.modal-content .product-price .original-price {
   text-decoration: line-through;
   font-size: 1rem;
-  color: var(--text-);
+  color: var(--text-muted);
   margin-left: 0.5rem;
   font-weight: lighter;
 }
