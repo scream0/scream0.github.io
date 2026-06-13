@@ -42,17 +42,29 @@
         
         </div>
         <!-- search form end -->
+
+
       <!-- shopping cart start -->
        <div class="shopping-cart">
           <div class="cart-item">
             <img src="assets/produk/crush.jpg" alt="Extrait de Parfum" />
             <div class="cart-item-details">
               <h4>Extrait de Parfum</h4>
-              <div class="item-price">IDR 149K</div>
-               </div>
+              <div class="item-price">
+                <span class="current-price">IDR 149K</span>&times;
+                <button class="quantity-btn-minus">&minus;</button>
+                <span class="quantity">1</span>
+                <button class="quantity-btn-plus">&plus;</button> &equals;
+                <span class="total-price">IDR 149K</span>
+
+                
+              </div>
+            </div>
           </div>
           </div>
       <!-- shopping cart end -->
+
+      <!-- navbar extra start -->
         <div class="navbar-extra">
         <a href="#" id="search-button" >
             <i data-feather="search"></i>
@@ -67,9 +79,9 @@
         </a>
       </div>
     </nav>
-    <!-- navbar end -->
+    <!-- navbar extra end -->
 
-    <!-- hero section -->
+    <!-- hero section start -->
     <section id="home" class="hero">
       <main class="content">
         <h1>Kami meracik setiap produk dengan <span>penuh perhatian</span></h1>
@@ -80,6 +92,8 @@
         <a href="#product" class="cta">Lihat Produk</a>
     </section>
     <!-- hero section end -->
+
+
 <!-- about section -->
     <section id="about" class="about">
         <h2><span>Tentang</span> Kami</h2>
@@ -185,11 +199,8 @@
     <!-- footer start -->
      <footer>
      <div class="footer-social">  
-      <a href="https://www.instagram.com/xarproject/" target="_blank" class="social-link">
+      <a href="https://www.instagram.com/xar.project/" target="_blank" class="social-link">
         <i data-feather="instagram"></i>
-      </a>
-      <a href="https://www.facebook.com/xarproject" target="_blank" class="social-link">
-        <i data-feather="facebook"></i> 
       </a>
       <a href="https://shopee.co.id/xarproject" target="_blank" class="social-link">
         <i data-feather="shopping-bag"></i>
@@ -218,7 +229,7 @@
            
             <div class="modal-content">
                <div class="modal-image">
-              <img :src="${item.image}" alt="${item.name}" />
+              <img :src="${item.image}" :alt="${item.name}" />
             </div>
               <div class="modal-details">
               <h3 x-text="item.name"></h3>
