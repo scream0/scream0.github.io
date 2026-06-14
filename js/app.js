@@ -35,17 +35,105 @@ document.addEventListener("alpine:init", () => {
     items: [],
     total: 0,
     quantity: 0,
+    // fungsi untuk menambahkan item ke cart
     add(newItem) {
-      this.items.push(newItem);
-      this.quantity++;
-      this.total += newItem.price;
-      console.log(this.items);
+      //cek apakah item sudah ada di cart
+      const cartItem = this.items.find((item) => item.id === newItem.id);
+      // jika belum ada, tambahkan item baru ke cart
+      if (!cartItem) {
+        this.items.push({
+          ...newItem,
+          quantity: 1,
+          total: newItem.price,
+        });
+        this.quantity++;
+        this.total += newItem.price;
+        // jika sudah ada, update jumlah dan total harga item di cart
+      } else {
+        this.items = this.items.map((item) => {
+          // jika barang berbeda
+          if (item.id !== newItem.id) {
+            return item;
+          } else {
+            // jika item sudah ada, update jumlah dan total harga item di cart
+            item.quantity++;
+            item.total = item.price * item.quantity;
+            this.quantity++;
+            this.total += item.price;
+            return item;
+          }
+        });
+      }
+    },
+
+    // fungsi untuk menghapus item dari cart
+    remove(itemId) {
+      // cari item yang akan dihapus dari cart
+      const cartItem = this.items.find((item) => item.id === itemId);
+      // jika item lebih dari 1, kurangi jumlah dan total harga item di cart
+      if (cartItem.quantity > 1) {
+        this.items = this.items.map((item) => {
+          // jika bukan barang yg diklik
+          if (item.id !== itemId) {
+            return item;
+          } else {
+            item.quantity--;
+            item.total = item.price * item.quantity;
+            this.quantity--;
+            this.total -= item.price;
+            return item;
+          }
+        });
+      } else if (cartItem.quantity === 1) {
+        //jika barang sisa 1
+        this.items = this.items.filter((item) => item.id !== itemId);
+        this.quantity--;
+        this.total -= item.price;
+      }
     },
   });
 });
 
-//konversi ke rupiah
+//form validasi
+const checkoutBtn = document.querySelector(".checkout-btn");
+checkoutBtn.disabled = true;
+// ambil form
+const formCheckout = document.querySelector("#checkoutForm");
+formCheckout.addEventListener("keyup", function () {
+  for (let i = 0; i < formCheckout.elements.length; i++)
+    if (formCheckout.elements[i].value.length !== 0) {
+      checkoutBtn.classList.remove("disabled");
+      checkoutBtn.classList.add("disabled");
+    } else {
+      return false;
+    }
+  checkoutBtn.disabled = false;
+  checkoutBtn.classList.remove("disabled");
+});
 
+// kirim data ketika tombol checkout di klik
+checkoutBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+  const formData = new FormData(formCheckout);
+  const data = new URLSearchParams(formData);
+  const objData = Object.fromEntries(data);
+  const message = formatMsg(objData);
+  window.open("http://wa.me/6285171723607?text=" + encodeURIComponent(message));
+});
+
+//format pesan whatsapp
+const formatMsg = (obj) => {
+  return `Data Customer
+  Nama  : ${obj.nama}
+  Email  : ${obj.email}
+  No Hp  : ${obj.phone}
+Data Pesanan
+  ${JSON.parse(obj.items).map((item) => `${$item.name} (${item.quantity} x ${formatRupiah(item.total)})  \n`)}
+ TOTAL : ${formatRupiah(obj.total)} 
+ Terima Kasih. `;
+};
+
+//konversi ke rupiah
 const formatRupiah = (number) => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",

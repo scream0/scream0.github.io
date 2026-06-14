@@ -166,7 +166,6 @@ body {
 .shopping-cart .cart-item {
   position: relative;
   display: flex;
-  align-items: center;
   margin: 1.4rem 0;
   gap: 1rem;
   padding-bottom: 1.4rem;
@@ -178,10 +177,17 @@ body {
   border-radius: 0.5rem;
 }
 
-.shopping-cart h4 {
+.shopping-cart h3 {
   font-family: var(--font-serif);
   font-size: 1.2rem;
   color: var(--text-light);
+}
+
+.shopping-cart h4 {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--text-light);
+  text-align: center;
 }
 
 .shopping-cart .cart-item-details .item-price {
@@ -189,18 +195,79 @@ body {
   color: var(--text-light);
 }
 
-.shopping-cart .cart-item-details .remove-item {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  color: var(--text-muted);
+.shopping-cart .cart-item #qty-add,
+.shopping-cart .cart-item #qty-remove {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--text-dark);
+  width: 1.5rem;
+  height: 1.5rem;
+  text-align: center;
+  line-height: 1.5rem;
+  border-radius: 50%;
   cursor: pointer;
+  font-weight: bold;
 }
 
-.shopping-cart .cart-item-details .remove-item:hover {
+/* form checkout */
+.form-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border: 1px dashed var(--border-shadow-color);
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.form-container h5 {
   color: var(--text-light);
+  text-align: center;
+  font-size: 1rem;
 }
 
+.form-container form {
+  width: 100%;
+  text-align: center;
+}
+
+.form-container label {
+  color: var(--text-light);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.form-container span {
+  text-align: right;
+}
+
+.form-container input {
+  background-color: var(--bg-light);
+  padding: 5px;
+  font-size: 1rem;
+  width: 70%;
+}
+.form-container .checkout-btn {
+  margin-top: 2rem;
+  display: inline-block;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: var(--primary-color);
+  color: black;
+  border: none;
+  padding: 15px 35px;
+  transition: all 0.3s ease;
+}
+.form-container .checkout-btn.disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+}
+
+/* navbar dan search input */
 .navbar .search-form input {
   padding: 0.5rem;
   background-color: transparent;
@@ -282,7 +349,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 2px;
   background: var(--primary-color);
-  color: black;
+  color: var(--text-dark);
   border: none;
   padding: 15px 35px;
   transition: all 0.3s ease;
