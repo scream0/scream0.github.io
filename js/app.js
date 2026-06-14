@@ -112,32 +112,51 @@ formCheckout.addEventListener("keyup", function () {
 });
 
 // kirim data ketika tombol checkout di klik
-checkoutBtn.addEventListener("click", function (e) {
+checkoutBtn.addEventListener("click", async function (e) {
   e.preventDefault();
   const formData = new FormData(formCheckout);
   const data = new URLSearchParams(formData);
   const objData = Object.fromEntries(data);
   const message = formatMsg(objData);
-  window.open("http://wa.me/6285171723607?text=" + encodeURIComponent(message));
+  window.open(
+    "https://wa.me/6285171723607?text=" + encodeURIComponent(message),
+  );
+
+  /* minta transaksi token menggunakan ajax
+  try {
+    const respon = await fetch("php/placeorder.php", {
+      method: "POST",
+      body: data,
+    });
+
+    const token = await respon.text();
+    window.snap.embed(token);
+  } catch (error) {
+    console.log(err.message);
+  }
+*/
 });
 
 //format pesan whatsapp
 const formatMsg = (obj) => {
   return `Data Customer
-  Nama  : ${obj.nama}
+  Nama  : ${obj.name}
   Email  : ${obj.email}
   No Hp  : ${obj.phone}
 Data Pesanan
-  ${JSON.parse(obj.items).map((item) => `${$item.name} (${item.quantity} x ${formatRupiah(item.total)})  \n`)}
+  ${JSON.parse(obj.items).map(
+    (item) => `${item.name} (${item.quantity} x ${formatRupiah(item.total)})\n`,
+  )}
+    
  TOTAL : ${formatRupiah(obj.total)} 
  Terima Kasih. `;
 };
 
 //konversi ke rupiah
-const formatRupiah = (number) => {
+function formatRupiah(number) {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     minimumFractionDigits: 0,
   }).format(number);
-};
+}

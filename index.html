@@ -19,6 +19,10 @@
    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"></script>
      <!--app.js  -->
    <script src="js/app.js" async></script>
+     <script type="text/javascript"
+		src="https://app.stg.midtrans.com/snap/snap.js"
+    data-client-key="Mid-client-mxAh3ynr_EVMKYpi"></script>
+  
   </head>
 
   <body>
@@ -70,7 +74,7 @@
           <h4 x-show="!$store.cart.items.length" >Keranjang kosong</h4>
           <h4 x-show="$store.cart.items.length" >Total: <span x-text="formatRupiah($store.cart.total)"></span></h4>
 
-          <dib class="form-container" x-show="$store.cart.items.length" >
+          <div class="form-container" x-show="$store.cart.items.length" >
             <form action="" id="checkoutForm">
               <input type="hidden" name="items" x-model="JSON.stringify($store.cart.items)">
               <input type="hidden" name="total" x-model="$store.cart.total">
@@ -88,11 +92,15 @@
                 <input type="number"  name="phone" id="phone" autocomplete="off">
               </label>
 
-              <button class="checkout-btn disabled" id="checkout-btn" value="Checkout">Checkout</button>
+              <button class="checkout-btn disabled" type="submit" id="checkout-btn" value="Checkout">Checkout</button>
             </form>
           </dib>
 
           </div>
+          
+          
+          </div>
+
       <!-- shopping cart end -->
 
       <!-- navbar extra start -->
