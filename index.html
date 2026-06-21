@@ -14,14 +14,12 @@
     />
     <!-- custom styles -->
     <link rel="stylesheet" href="css/style.css" />
-    <!-- feather icons -->
-    <script src="https://unpkg.com/feather-icons"></script>
       <!--app.js  -->
    <script src="js/app.js" async></script>
-    <!-- payment gateway mid trans -->
+    <!-- payment gateway mid trans 
      <script type="text/javascript"
 		src="https://app.stg.midtrans.com/snap/snap.js"
-    data-client-key="Mid-client-mxAh3ynr_EVMKYpi"></script>
+    data-client-key="Mid-client-mxAh3ynr_EVMKYpi"></script> -->
   
   </head>
 <!-- head end -->
@@ -42,7 +40,7 @@
         <div class="search-form">
           <input type="search" id="search-box" placeholder="Cari produk..." />
         <label for="search-box" class="search-icon">
-            <i data-feather="search"></i>
+              <svg class="feather"><use href="assets/icon/feather-sprite.svg#search" /></svg>
           </label>
         
         </div>
@@ -111,15 +109,15 @@
       <!-- navbar extra start -->
         <div class="navbar-extra">
         <a href="#" id="search-button" >
-            <i data-feather="search"></i>
+              <svg class="feather"><use href="assets/icon/feather-sprite.svg#search" /></svg>
   
         </a>
         <a href="#" id="cart-button" >
-          <i data-feather="shopping-cart"></i>
+            <svg class="feather"><use href="assets/icon/feather-sprite.svg#shopping-cart" /></svg>
          <span class="cart-count" x-show="$store.cart.quantity > 0" x-text="$store.cart.quantity"></span> 
         </a>
         <a href="#" id="hamburger" >
-          <i data-feather="menu"></i>
+            <svg class="feather"><use href="assets/icon/feather-sprite.svg#menu" /></svg>
         </a>
       </div>
     </nav>
@@ -189,11 +187,11 @@
         </div>
       </div> </template>
   </div>
-
+<!-- modal start -->
   <div class="modal" id="item-detail-modal" x-show="selectedItem">
     <div class="modal-container">
       <a href="#" @click.prevent="selectedItem = null" class="modal-close">
-        <i data-feather="x"></i>
+          <svg class="feather"><use href="assets/icon/feather-sprite.svg#x" /></svg>
       </a>
        
       <div class="modal-content">
@@ -215,6 +213,7 @@
       </div>
     </div>
   </div>
+  <!-- modal end  -->
 </section>
      <!-- product section end -->
 
@@ -229,16 +228,16 @@
 <form action="" class="contact-form">
 
           <div class="input-group ">
-            <i data-feather="user"></i>
+              <svg class="feather"><use href="assets/icon/feather-sprite.svg#user" /></svg>
             <input type="text" placeholder="Nama" required />
             
           </div>
           <div class="input-group">
-            <i data-feather="mail"></i>
+              <svg class="feather"><use href="assets/icon/feather-sprite.svg#mail" /></svg>
             <input type="email" placeholder="Email"  required />
           </div>  
            <div class="input-group">
-              <i data-feather="phone"></i>
+                <svg class="feather"><use href="assets/icon/feather-sprite.svg#phone" /></svg>
               <input type="tel" placeholder="Nomor Telepon"   required />
             </div>
           
@@ -256,10 +255,10 @@
      <footer>
      <div class="footer-social">  
       <a href="https://www.instagram.com/xar.project/" target="_blank" class="social-link">
-        <i data-feather="instagram"></i>
+          <svg class="feather"><use href="assets/icon/feather-sprite.svg#instagram" /></svg>
       </a>
-      <a href="https://shopee.co.id/xarproject" target="_blank" class="social-link">
-        <i data-feather="shopping-bag"></i>
+      <a href="https://shopee.co.id/amboo.id" target="_blank" class="social-link">
+        <svg class="feather"><use href="assets/icon/feather-sprite.svg#shopping-bag" /></svg>
       </a>
       </div>
 
@@ -279,10 +278,6 @@
 
        
 
-    <!-- feather icons -->
-    <script>
-      feather.replace();
-    </script>
 
     <!-- my javascript -->
     <script src="js/script.js"></script>
@@ -290,7 +285,7 @@
 <script
   defer
   src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"
-></script>;
+></script>
 
   </body>
 <!-- body end -->
