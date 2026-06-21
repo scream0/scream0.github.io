@@ -1,193 +1,263 @@
-document.addEventListener("alpine:init", () => {
-  //1. DAFTARKAN STORE CART DI SINI (Agar $store.cart tidak undefined)
-  Alpine.store("cart", {
-    items: [],
-    total: 0,
-    quantity: 0,
-    // 1. Otonatis menghitung total harga dari semua item di cart
-    get total() {
-      return this.items.reduce(
+const { createApp, nextTick } = Vue;
+
+createApp({
+  data() {
+    return {
+      // --- STATE PENCARIAN ---
+      searchQuery: "",
+
+      // --- DATA PRODUK (DETAIL TAMBAHAN MASUK JSON) ---
+      produkItems: [
+        {
+          id: 1,
+          name: "Extrait De Parfum - Crush",
+          description:
+            "Parfum dengan konsentrasi tertinggi, memberikan aroma citrus segar yang intens digabungkan dengan sentuhan lembut vanilla dan kayu manis yang tahan lama.",
+          originalPrice: 200000,
+          price: 140000,
+          image: "crush.jpg",
+          // Detail Tambahan Khusus Produk 1
+          specs: {
+            category: "Extrait De Parfum",
+            duration: "8 - 12 Jam",
+          },
+        },
+        {
+          id: 2,
+          name: "Extrait De Parfum - Sugar Cane",
+          description:
+            "Parfum dengan konsentrasi tertinggi, memberikan aroma manis gourmand yang mewah dan hangat, meninggalkan impresi elegan di setiap langkah Anda.",
+          originalPrice: 200000,
+          price: 140000,
+          image: "sugarcane.jpg",
+          // Detail Tambahan Khusus Produk 2
+          specs: {
+            category: "Extrait De Parfum",
+            duration: "8 - 12 Jam",
+          },
+        },
+        {
+          id: 3,
+          name: "Drip Bag Coffee - Arabica",
+          description:
+            "Kopi Arabica artisanal pilihan berkualitas tinggi yang diproses secara presisi, memberikan keseimbangan rasa rasa buah (fruity) yang kaya dan kompleks.",
+          originalPrice: 70000,
+          price: 50000,
+          image: "dripbagcoffee.jpg",
+          // Detail Tambahan Khusus Produk 3 (Menyesuaikan Karakter Kopi)
+          specs: {
+            category: "Drip Bag Coffee",
+            duration: "Netto: 5 x 10gr", // Mengubah info ketahanan menjadi berat bersih otomatis
+          },
+        },
+      ],
+
+      // --- STATE NAVIGASI & MENU TRIGGER ---
+      isScrolled: false,
+      isActiveNavbar: false,
+      isActiveSearch: false,
+      isActiveCart: false,
+
+      // --- STATE MODAL DETAIL ---
+      isOpenModal: false,
+      selectedItem: null,
+
+      // --- STATE KERANJANG (CART STORE) ---
+      cart: {
+        items: [],
+      },
+
+      // --- STATE FORM CHECKOUT ---
+      customer: {
+        name: "",
+        email: "",
+        phone: "",
+      },
+
+      // --- STATE FORM KONTAK KAMI ---
+      contactForm: {
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      },
+    };
+  },
+
+  mounted() {
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#hamburger") && !e.target.closest(".navbar-nav")) {
+        this.isActiveNavbar = false;
+      }
+      if (
+        !e.target.closest("#search-button") &&
+        !e.target.closest(".search-form")
+      ) {
+        this.isActiveSearch = false;
+      }
+      if (
+        !e.target.closest("#cart-button") &&
+        !e.target.closest(".shopping-cart")
+      ) {
+        this.isActiveCart = false;
+      }
+    });
+
+    window.addEventListener("scroll", () => {
+      this.isScrolled = window.scrollY > 50;
+    });
+  },
+
+  computed: {
+    filteredProdukItems() {
+      if (!this.searchQuery.trim()) {
+        return this.produkItems;
+      }
+      const query = this.searchQuery.toLowerCase();
+      return this.produkItems.filter((item) =>
+        item.name.toLowerCase().includes(query),
+      );
+    },
+
+    cartTotal() {
+      return this.cart.items.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0,
       );
     },
 
-    // 2. Otomatis menghitung total jumlah barang di cart
-    get quantity() {
-      return this.items.reduce((sum, item) => sum + item.quantity, 0);
+    cartQuantity() {
+      return this.cart.items.reduce((sum, item) => sum + item.quantity, 0);
     },
-    // fungsi untuk menambahkan item ke cart
-    add(newItem) {
-      //cek apakah item sudah ada di cart
-      const cartItem = this.items.find((item) => item.id === newItem.id);
-      // jika belum ada, tambahkan item baru ke cart
+
+    isFormValid() {
+      return (
+        this.customer.name.trim().length > 0 &&
+        this.customer.email.trim().length > 0 &&
+        String(this.customer.phone).length > 0
+      );
+    },
+  },
+
+  methods: {
+    bukaDetail(item) {
+      this.selectedItem = item;
+      this.isOpenModal = true;
+    },
+
+    toggleSearch() {
+      this.isActiveSearch = !this.isActiveSearch;
+      if (this.isActiveSearch) {
+        this.$nextTick(() => {
+          const searchBox = document.getElementById("search-box");
+          if (searchBox) searchBox.focus();
+        });
+      }
+    },
+
+    addToCart(newItem) {
+      const cartItem = this.cart.items.find((item) => item.id === newItem.id);
+
       if (!cartItem) {
-        this.items.push({
+        this.cart.items.push({
           ...newItem,
           quantity: 1,
           total: newItem.price,
         });
-
-        this.quantity++;
-        this.total += item.price;
-
-        // jika sudah ada, update jumlah dan total harga item di cart
       } else {
-        this.items = this.items.map((item) => {
-          // jika barang berbeda
-          if (item.id !== newItem.id) {
-            return item;
-          } else {
-            // jika item sudah ada, update jumlah dan total harga item di cart
-            item.quantity++;
-            item.total = item.price * item.quantity;
-            this.quantity++;
-            this.total += item.price;
-            return item;
-          }
-        });
+        cartItem.quantity++;
+        cartItem.total = cartItem.price * cartItem.quantity;
       }
     },
 
-    // fungsi untuk menghapus item dari cart
-    remove(itemId) {
-      // cari item yang akan dihapus dari cart
-      const cartItem = this.items.find((item) => item.id === itemId);
-      // jika item lebih dari 1, kurangi jumlah dan total harga item di cart
+    removeFromCart(itemId) {
+      const cartItem = this.cart.items.find((item) => item.id === itemId);
+      if (!cartItem) return;
+
       if (cartItem.quantity > 1) {
-        //telusuri 1 1
-        this.items = this.items.map((item) => {
-          // jika bukan barang yg diklik
-          if (item.id !== itemId) {
-            return item;
-          } else {
-            item.quantity--;
-            item.total = item.price * item.quantity;
-            this.quantity--;
-            this.total -= item.price;
-            return item;
-          }
-        });
+        cartItem.quantity--;
+        cartItem.total = cartItem.price * cartItem.quantity;
       } else if (cartItem.quantity === 1) {
-        //jika barang sisa 1
-        this.items = this.items.filter((item) => item.id !== itemId);
-        this.quantity--;
-        this.total -= cartItem.price;
+        this.cart.items = this.cart.items.filter((item) => item.id !== itemId);
       }
     },
-  });
-  // 2. DATA KOMPONEN PRODUK ANDA
-  Alpine.data("listProduk", () => ({
-    items: [
-      {
-        id: 1,
-        name: "Extrait De Parfum - Crush",
-        description:
-          "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
-        originalPrice: 200000,
-        price: 140000,
-        image: "crush.jpg",
-      },
-      {
-        id: 2,
-        name: "Extrait De Parfum - Sugar Cane",
-        description:
-          "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
-        originalPrice: 200000,
-        price: 140000,
-        image: "sugarcane.jpg",
-      },
-      {
-        id: 3,
-        name: "Drip Bag Coffee - Arabica",
-        description:
-          "Kopi Arabica berkualitas tinggi, memberikan rasa yang kaya dan kompleks.",
-        originalPrice: 70000,
-        price: 50000,
-        image: "dripbagcoffee.jpg",
-      },
-    ],
 
-    // menyimpan data
-    selectedId: null,
+    async checkout() {
+      if (!this.isFormValid) return;
 
-    pilihData(itemId) {
-      this.selectedId = itemId;
+      const formData = new URLSearchParams();
+      formData.append("name", this.customer.name);
+      formData.append("email", this.customer.email);
+      formData.append("phone", this.customer.phone);
+      formData.append("total", this.cartTotal);
+      formData.append("items", JSON.stringify(this.cart.items));
+
+      try {
+        const response = await fetch("php/placeorder.php", {
+          method: "POST",
+          body: formData,
+        });
+
+        const token = await response.text();
+
+        window.snap.pay(token, {
+          onSuccess: (result) => {
+            alert("Pembayaran Berhasil!");
+            this.cart.items = [];
+          },
+          onPending: (result) => {
+            alert("Menunggu Pembayaran Anda...");
+          },
+          onError: (result) => {
+            alert("Pembayaran Gagal!");
+          },
+          onClose: () => {
+            alert("Anda menutup halaman pembayaran sebelum selesai.");
+          },
+        });
+      } catch (error) {
+        console.error("Terjadi kesalahan sistem:", error.message);
+        alert("Gagal memproses pesanan, silakan coba lagi.");
+      }
     },
 
-    get selectedItem() {
-      // Jika belum ada ID yang dipilih, kembalikan null
-      if (!this.selectedId) return null;
-
-      // Mencari data yang cocok dengan selectedId
-      return this.items.find((item) => item.id === this.selectedId);
+    checkoutWa() {
+      if (!this.isFormValid) return;
+      const message = this.formatMsg();
+      window.open(
+        "https://wa.me/6285171723607?text=" + encodeURIComponent(message),
+      );
     },
-  }));
-});
 
-//form validasi
-const checkoutBtn = document.querySelector(".checkout-btn");
-checkoutBtn.disabled = true;
-// ambil form
-const formCheckout = document.querySelector("#checkoutForm");
-formCheckout.addEventListener("keyup", function () {
-  for (let i = 0; i < formCheckout.elements.length; i++)
-    if (formCheckout.elements[i].value.length !== 0) {
-      checkoutBtn.classList.remove("disabled");
-      checkoutBtn.classList.add("disabled");
-    } else {
-      return false;
-    }
-  checkoutBtn.disabled = false;
-  checkoutBtn.classList.remove("disabled");
-});
+    formatMsg() {
+      const itemDetails = this.cart.items
+        .map(
+          (item) =>
+            `${item.name} (${item.quantity} x ${this.rupiah(item.price)})\n`,
+        )
+        .join("");
 
-// kirim data ketika tombol checkout di klik
-checkoutBtn.addEventListener("click", async function (e) {
-  e.preventDefault();
-  const formData = new FormData(formCheckout);
-  const data = new URLSearchParams(formData);
-  const objData = Object.fromEntries(data);
-  const message = formatMsg(objData);
-  window.open(
-    "https://wa.me/6285171723607?text=" + encodeURIComponent(message),
-  );
+      return `Data Customer\nNama   : ${this.customer.name}\nEmail  : ${this.customer.email}\nNo Hp  : ${this.customer.phone}\n\nData Pesanan\n${itemDetails}\nTOTAL : ${this.rupiah(this.cartTotal)}\n\nTerima Kasih.`;
+    },
 
-  /* minta transaksi token menggunakan ajax
-  try {
-    const respon = await fetch("php/placeorder.php", {
-      method: "POST",
-      body: data,
-    });
+    kirimPesanKontak() {
+      const teksPesan = `Halo Admin Xar Project!\nAda pesan baru dari halaman Kontak Web.\n\nNama : ${this.contactForm.name}\nEmail : ${this.contactForm.email}\nNo HP : ${this.contactForm.phone}\n\nIsi Pesan :\n"${this.contactForm.message}"\n\nMohon segera direspon ya, terima kasih!`;
+      const urlWhatsApp =
+        "https://wa.me/6285171723607?text=" + encodeURIComponent(teksPesan);
+      window.open(urlWhatsApp, "_blank");
 
-    const token = await respon.text();
-    window.snap.embed(token);
-  } catch (error) {
-    console.log(err.message);
-  }
-*/
-});
+      this.contactForm.name = "";
+      this.contactForm.email = "";
+      this.contactForm.phone = "";
+      this.contactForm.message = "";
+    },
 
-//format pesan whatsapp
-const formatMsg = (obj) => {
-  return `Data Customer
-  Nama  : ${obj.name}
-  Email  : ${obj.email}
-  No Hp  : ${obj.phone}
-Data Pesanan
-  ${JSON.parse(obj.items).map(
-    (item) => `${item.name} (${item.quantity} x ${Rupiah(item.total)})\n`,
-  )}
-    
- TOTAL : ${Rupiah(obj.total)} 
- Terima Kasih. `;
-};
-
-//konversi ke rupiah
-function Rupiah(number) {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(number);
-}
+    rupiah(number) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+      }).format(number);
+    },
+  },
+}).mount("#app");

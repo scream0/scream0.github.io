@@ -1,39 +1,55 @@
 <?php   
-/*Install Midtrans PHP Library (https://github.com/Midtrans/midtrans-php)
-composer require midtrans/midtrans-php
-                              
-Alternatively, if you are not using **Composer**, you can download midtrans-php library 
-(https://github.com/Midtrans/midtrans-php/archive/master.zip), and then require 
-the file manually.   
-
-require_once dirname(__FILE__) . '/pathofproject/Midtrans.php'; */
+// Memastikan file Midtrans ter-load dengan benar
 require_once dirname(__FILE__) . '/midtrans-php-master/Midtrans.php';
-//SAMPLE REQUEST START HERE
 
-// Set your Merchant Server Key
-\Midtrans\Config::$serverKey = 'Mid-server-OuaL3PDsLg5kP733EdvCtgMZ';
-// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+// Set Server Key dan Konfigurasi Midtrans
+\Midtrans\Config::$serverKey = 'Mid-server-AOuaL3PDsLg5kP733EdvCtgMZ';
 \Midtrans\Config::$isProduction = false;
-// Set sanitization on (default)
 \Midtrans\Config::$isSanitized = true;
-// Set 3DS transaction for credit card to true
 \Midtrans\Config::$is3ds = true;
 
+// 1. Validasi apakah ada data yang dikirim dari Vue
+if (!isset($_POST['total']) || !isset($_POST['items'])) {
+    http_response_code(400);
+    echo "Bad Request: Data tidak lengkap.";
+    exit;
+}
+
+// 2. Ambil data items dari Vue dan bersihkan untuk Midtrans
+$raw_items = json_decode($_POST['items'], true);
+$item_details = array();
+
+if (is_array($raw_items)) {
+    foreach ($raw_items as $item) {
+        $item_details[] = array(
+            'id'       => $item['id'],
+            'price'    => $item['price'], // Midtrans butuh harga SATUAN
+            'quantity' => $item['quantity'], // Midtrans butuh JUMLAH
+            'name'     => $item['name']
+        );
+    }
+}
+
+// 3. Susun parameter transaksi untuk Midtrans
 $params = array(
     'transaction_details' => array(
-        'order_id' => rand(),
-        'gross_amount' => $_POST['total'],
+        'order_id'     => 'XAR-' . rand() . '-' . time(), // Format order ID unik
+        'gross_amount' => (int)$_POST['total'],
     ),
-    'item_details' => json_decode($_POST['items'],true),
+    'item_details' => $item_details, // Menggunakan data item yang sudah disaring
     'customer_details' => array(
         'first_name' => $_POST['name'],
-        'email' => $_POST['email'],
-        'phone' => $_POST['phone'],
+        'email'      => $_POST['email'],
+        'phone'      => $_POST['phone'],
     ),
 );
 
-$snapToken = \Midtrans\Snap::getSnapToken($params);
-
-echo $snapToken;
-
+try {
+    // 4. Minta token dari Midtrans
+    $snapToken = \Midtrans\Snap::getSnapToken($params);
+    echo $snapToken; // Token ini yang akan ditangkap oleh window.snap.pay() di Vue
+} catch (Exception $e) {
+    http_response_code(500);
+    echo "Midtrans Error: " . $e->getMessage();
+}
 ?>
