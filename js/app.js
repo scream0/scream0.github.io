@@ -1,51 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("listProduk", () => ({
-    items: [
-      {
-        id: 1,
-        name: "Extrait De Parfum - Crush",
-        description:
-          "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
-        originalPrice: 200000,
-        price: 140000,
-        image: "crush.jpg",
-      },
-      {
-        id: 2,
-        name: "Extrait De Parfum - Sugar Cane",
-        description:
-          "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
-        originalPrice: 200000,
-        price: 140000,
-        image: "sugarcane.jpg",
-      },
-      {
-        id: 3,
-        name: "Drip Bag Coffee - Arabica",
-        description:
-          "Kopi Arabica berkualitas tinggi, memberikan rasa yang kaya dan kompleks.",
-        originalPrice: 70000,
-        price: 50000,
-        image: "dripbagcoffee.jpg",
-      },
-    ],
-
-    // menyimpan data
-    selectedId: null,
-
-    pilihData(itemId) {
-      this.selectedId = itemId;
-    },
-
-    get selectedItem() {
-      // Jika belum ada ID yang dipilih, kembalikan null
-      if (!this.selectedId) return null;
-
-      // Mencari data yang cocok dengan selectedId
-      return this.items.find((item) => item.id === this.selectedId);
-    },
-  }));
-
+  //1. DAFTARKAN STORE CART DI SINI (Agar $store.cart tidak undefined)
   Alpine.store("cart", {
     items: [],
     total: 0,
@@ -123,6 +77,53 @@ document.addEventListener("alpine:init", () => {
       }
     },
   });
+  // 2. DATA KOMPONEN PRODUK ANDA
+  Alpine.data("listProduk", () => ({
+    items: [
+      {
+        id: 1,
+        name: "Extrait De Parfum - Crush",
+        description:
+          "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
+        originalPrice: 200000,
+        price: 140000,
+        image: "crush.jpg",
+      },
+      {
+        id: 2,
+        name: "Extrait De Parfum - Sugar Cane",
+        description:
+          "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
+        originalPrice: 200000,
+        price: 140000,
+        image: "sugarcane.jpg",
+      },
+      {
+        id: 3,
+        name: "Drip Bag Coffee - Arabica",
+        description:
+          "Kopi Arabica berkualitas tinggi, memberikan rasa yang kaya dan kompleks.",
+        originalPrice: 70000,
+        price: 50000,
+        image: "dripbagcoffee.jpg",
+      },
+    ],
+
+    // menyimpan data
+    selectedId: null,
+
+    pilihData(itemId) {
+      this.selectedId = itemId;
+    },
+
+    get selectedItem() {
+      // Jika belum ada ID yang dipilih, kembalikan null
+      if (!this.selectedId) return null;
+
+      // Mencari data yang cocok dengan selectedId
+      return this.items.find((item) => item.id === this.selectedId);
+    },
+  }));
 });
 
 //form validasi

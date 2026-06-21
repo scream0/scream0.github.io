@@ -53,7 +53,7 @@
       <!-- shopping cart start -->
        <div class="shopping-cart">
 
-          <template x-for="(item, index) in $store.cart.items" x-key="index">
+          <template x-for="(item, index) in $store.cart.items" :key="index">
          
           <div class="cart-item">
             <img :src="`assets/produk/${item.image}`" :alt="item.name" />
