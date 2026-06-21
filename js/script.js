@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", (e) => {
       e.preventDefault();
       modal.style.display = "flex";
-      
     });
   });
 

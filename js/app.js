@@ -42,7 +42,6 @@ document.addEventListener("alpine:init", () => {
             item.quantity++;
             item.total = item.price * item.quantity;
             this.quantity++;
-
             this.total += item.price;
             return item;
           }
