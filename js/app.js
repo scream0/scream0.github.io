@@ -33,9 +33,8 @@ document.addEventListener("alpine:init", () => {
     // menyimpan data
     selectedId: null,
 
-    pilihData(itemIDd) {
-      this.selectedId = itemIDd;
-      console.log(itemIDd);
+    pilihData(itemId) {
+      this.selectedId = itemId;
     },
 
     get selectedItem() {
