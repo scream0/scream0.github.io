@@ -1,13 +1,13 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("listProducts", () => ({
+  Alpine.data("listProduk", () => ({
     items: [
       {
         id: 1,
         name: "Extrait De Parfum - Crush",
         description:
           "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
-        originalPrice: "200000",
-        price: "140000",
+        originalPrice: 200000,
+        price: 140000,
         image: "crush.jpg",
       },
       {
@@ -15,8 +15,8 @@ document.addEventListener("alpine:init", () => {
         name: "Extrait De Parfum - Sugar Cane",
         description:
           "Parfum dengan konsentrasi tertinggi, memberikan aroma yang intens dan tahan lama.",
-        originalPrice: "200000",
-        price: "140000",
+        originalPrice: 200000,
+        price: 140000,
         image: "sugarcane.jpg",
       },
       {
@@ -24,17 +24,45 @@ document.addEventListener("alpine:init", () => {
         name: "Drip Bag Coffee - Arabica",
         description:
           "Kopi Arabica berkualitas tinggi, memberikan rasa yang kaya dan kompleks.",
-        originalPrice: "70000",
-        price: "50000",
+        originalPrice: 70000,
+        price: 50000,
         image: "dripbagcoffee.jpg",
       },
     ],
+
+    // menyimpan data
+    selectedId: null,
+
+    pilihData(itemIDd) {
+      this.selectedId = itemIDd;
+      console.log(itemIDd);
+    },
+
+    get selectedItem() {
+      // Jika belum ada ID yang dipilih, kembalikan null
+      if (!this.selectedId) return null;
+
+      // Mencari data yang cocok dengan selectedId
+      return this.items.find((item) => item.id === this.selectedId);
+    },
   }));
 
   Alpine.store("cart", {
     items: [],
     total: 0,
     quantity: 0,
+    // 1. Otonatis menghitung total harga dari semua item di cart
+    get total() {
+      return this.items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+    },
+
+    // 2. Otomatis menghitung total jumlah barang di cart
+    get quantity() {
+      return this.items.reduce((sum, item) => sum + item.quantity, 0);
+    },
     // fungsi untuk menambahkan item ke cart
     add(newItem) {
       //cek apakah item sudah ada di cart
@@ -46,8 +74,10 @@ document.addEventListener("alpine:init", () => {
           quantity: 1,
           total: newItem.price,
         });
+
         this.quantity++;
-        this.total += newItem.price;
+        this.total += item.price;
+
         // jika sudah ada, update jumlah dan total harga item di cart
       } else {
         this.items = this.items.map((item) => {
@@ -59,6 +89,7 @@ document.addEventListener("alpine:init", () => {
             item.quantity++;
             item.total = item.price * item.quantity;
             this.quantity++;
+
             this.total += item.price;
             return item;
           }
@@ -72,6 +103,7 @@ document.addEventListener("alpine:init", () => {
       const cartItem = this.items.find((item) => item.id === itemId);
       // jika item lebih dari 1, kurangi jumlah dan total harga item di cart
       if (cartItem.quantity > 1) {
+        //telusuri 1 1
         this.items = this.items.map((item) => {
           // jika bukan barang yg diklik
           if (item.id !== itemId) {
@@ -88,7 +120,7 @@ document.addEventListener("alpine:init", () => {
         //jika barang sisa 1
         this.items = this.items.filter((item) => item.id !== itemId);
         this.quantity--;
-        this.total -= item.price;
+        this.total -= cartItem.price;
       }
     },
   });
@@ -145,15 +177,15 @@ const formatMsg = (obj) => {
   No Hp  : ${obj.phone}
 Data Pesanan
   ${JSON.parse(obj.items).map(
-    (item) => `${item.name} (${item.quantity} x ${formatRupiah(item.total)})\n`,
+    (item) => `${item.name} (${item.quantity} x ${Rupiah(item.total)})\n`,
   )}
     
- TOTAL : ${formatRupiah(obj.total)} 
+ TOTAL : ${Rupiah(obj.total)} 
  Terima Kasih. `;
 };
 
 //konversi ke rupiah
-function formatRupiah(number) {
+function Rupiah(number) {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",

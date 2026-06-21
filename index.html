@@ -58,11 +58,11 @@
             <div class="cart-item-details">
               <h3 x-text="item.name"></h3>
               <div class="item-price">
-                <span class="current-price" x-text="formatRupiah(item.price)"></span>&times;
+                <span class="current-price" x-text="Rupiah(item.price)"></span>&times;
                 <button id="qty-remove" @click="$store.cart.remove(item.id)">&minus;</button>
                 <span class="quantity" x-text="item.quantity"></span>
                 <button id="qty-add" @click="$store.cart.add(item)">&plus;</button> &equals;
-                <span class="total-price" x-text="formatRupiah(item.total)"></span>
+                <span class="total-price" x-text="Rupiah(item.total)"></span>
 
                 
               </div>
@@ -71,8 +71,12 @@
 
 
           </template>
-          <h4 x-show="!$store.cart.items.length" >Keranjang kosong</h4>
-          <h4 x-show="$store.cart.items.length" >Total: <span x-text="formatRupiah($store.cart.total)"></span></h4>
+          <h4 x-show="!$store.cart.items.length" >
+            <div class="keranjang-kosong"><svg class="feather">
+  <use href="assets/icon/feather-sprite.svg#shopping-cart" />
+            
+</svg></div>Keranjang Kosong</h4>
+          <h4 x-show="$store.cart.items.length" >Total: <span x-text="Rupiah($store.cart.total)"></span></h4>
 
           <div class="form-container" x-show="$store.cart.items.length" >
             <form action="" id="checkoutForm">
@@ -159,18 +163,18 @@
 
 
     <!-- product section start -->
-<section id="product" class="product" x-data="listProducts">
+<section id="product" class="product" x-data="listProduk">
         <h2>Produk<span> Kami</span></h2>
 
         <div class="row">
-          <template x-for="(item, index) in items" x-key="index">
+          <template x-for="item in items" :key="item.id">
             <div class="product-card">
             <div class="product-icon">
               <a href="#" @click.prevent="$store.cart.add(item)" class="all-cart">
 <svg class="feather">
   <use href="assets/icon/feather-sprite.svg#shopping-cart" />
 </svg></a>
-              <a href="#" @click.prevent="" class="view-details">
+              <a href="#" @click.prevent="pilihData(item.id)" class="view-details">
 <svg class="feather">
   <use href="assets/icon/feather-sprite.svg#eye" />
 </svg></a>
@@ -188,7 +192,7 @@
                 <i data-feather="star" class="filled"></i>
               </div>
               <div class="product-price">
-                <i x-text="formatRupiah(item.price)" class="current-price"></i> <span x-text="formatRupiah(item.originalPrice)" class="original-price"></span>
+                <i x-text="Rupiah(item.price)" class="current-price"></i> <span x-text="Rupiah(item.originalPrice)" class="original-price"></span>
               </div>
             </div>
      
@@ -259,20 +263,21 @@
     </footer>
       <!-- footer end -->
        <!-- modal box start -->
-        <div class="modal" id="item-detail-modal">
-       
+        <div class="modal" id="item-detail-modal" x-data="listProduk">
+        
           <div class="modal-container">
                <a href="#" class="modal-close">
             <i data-feather="x"></i>
           </a>
            
             <div class="modal-content">
+              <template x-if="selectedItem">
                <div class="modal-image">
-              <img :src="`assets/produk/${item.image}`" :alt="item.name" />
+              <img :src="assets/produk/selectedItem.image" :alt="selectedItem.name" />
             </div>
               <div class="modal-details">
-              <h3 x-text="item.name"></h3>
-              <p x-text="item.description"></p>
+              <h3 x-text="selectedItem.name"></h3>
+              <p x-text="selectedItem.description"></p>
               <div class="product-star">
                 <i data-feather="star" class="filled"></i>
                 <i data-feather="star" class="filled"></i>
@@ -280,15 +285,16 @@
                 <i data-feather="star" class="filled"></i>
                 <i data-feather="star" class="filled"></i>
               </div>
-              <div class="product-price">
-                <i x-text="item.price" class="current-price"></i>
-                <span class="original-price" x-text="item.originalPrice"></span>
-              </div>
-              <a href="#" class="btn-add-to-cart"><i data-feather="shopping-cart"></i><span> Tambah ke keranjang</span></a>
-
+            </template>
+              <!-- Pesan alternatif jika belum ada produk yang dipilih -->
+                <template x-if="!selectedItem">
+                    <p style="color: gray;">Silakan pilih produk di atas untuk melihat detail.</p>
+                      </template>
             </div>
           </div>
         </div>
+      
+
         </div>
         <!-- modal box end -->
     <!-- feather icons -->

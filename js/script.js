@@ -40,26 +40,29 @@ cartBtn.onclick = (e) => {
   shoppingCart.classList.toggle("active");
 };
 
-// toggle modal
-const modal = document.querySelector(".modal");
-const viewDetailsButtons = document.querySelectorAll(".view-details");
-const modalCloseButton = document.querySelector(".modal-close");
-viewDetailsButtons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    e.preventDefault();
-    modal.style.display = "flex";
+document.addEventListener("DOMContentLoaded", () => {
+  // toggle modal
+  const modal = document.querySelector(".modal");
+  const viewDetailsButtons = document.querySelectorAll(".view-details");
+  const modalCloseButton = document.querySelector(".modal-close");
+  viewDetailsButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      modal.style.display = "flex";
+      
+    });
   });
-});
 
-// close modal
-modalCloseButton.addEventListener("click", (e) => {
-  e.preventDefault();
-  modal.style.display = "none";
-});
-
-// close modal when clicking outside of it
-window.addEventListener("click", (e) => {
-  if (e.target === modal) {
+  // close modal
+  modalCloseButton.addEventListener("click", (e) => {
+    e.preventDefault();
     modal.style.display = "none";
-  }
+  });
+
+  // close modal when clicking outside of it
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
 });
