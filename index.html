@@ -19,6 +19,7 @@
       src="https://app.stg.midtrans.com/snap/snap.js"
       data-client-key="Mid-client-AmxAh3ynr_EVMKYpi"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="js/app.js" defer></script>
   </head>
   <body>
@@ -71,20 +72,48 @@
 
         <!-- SHOPPING CART -->
         <div :class="['shopping-cart', { 'active': isActiveCart }]">
+          <!-- Sentuhan Pro: Tombol Close Khusus Mobile/HP -->
+          <button class="cart-close-btn" @click.prevent="isActiveCart = false">
+            <svg class="feather">
+              <use href="assets/icon/feather-sprite.svg#x" />
+            </svg>
+          </button>
+
           <h3>Keranjang Belanja</h3>
 
+          <!-- Cari bagian ini di dalam shopping-cart index.html Anda -->
           <div class="cart-items-wrapper" v-show="cart.items.length">
-            <div class="cart-item" v-for="item in cart.items" :key="item.id">
+            <div
+              class="cart-item"
+              v-for="item in cart.items"
+              :key="item.cartId"
+            >
+              <!-- Ganti :key ke item.cartId -->
               <img :src="`assets/produk/${item.image}`" :alt="item.name" />
               <div class="cart-item-details">
                 <h3>{{ item.name }}</h3>
+                <!-- TAMBAHAN: Tampilkan Varian Ukuran Elegan di bawah judul produk -->
+                <p
+                  style="
+                    font-size: 0.85rem;
+                    color: #888888;
+                    margin-bottom: 0.3rem;
+                  "
+                >
+                  Varian: {{ item.size }}
+                </p>
+
                 <div class="item-price">
                   <span class="current-price">{{ rupiah(item.price) }}</span> ×
-                  <button id="qty-remove" @click="removeFromCart(item.id)">
+                  <!-- PERBAIKAN: Operasikan item.cartId ke fungsi remove -->
+                  <button id="qty-remove" @click="removeFromCart(item.cartId)">
                     −
                   </button>
                   <span class="quantity">{{ item.quantity }}</span>
-                  <button id="qty-add" @click="addToCart(item)">&plus;</button>
+                  <!-- PERBAIKAN: Operasikan item ke fungsi add -->
+                  <button id="qty-add" @click="addToCart(item, item)">
+                    &plus;
+                  </button>
                   &equals;
                   <span class="total-price">{{ rupiah(item.total) }}</span>
                 </div>
@@ -98,9 +127,17 @@
                 <use href="assets/icon/feather-sprite.svg#shopping-cart" />
               </svg>
             </div>
-            Keranjang Anda Kosong
-          </h4>
+            <p style="margin-bottom: 1.5rem">Keranjang Anda Kosong</p>
 
+            <a
+              href="#product"
+              @click="isActiveCart = false"
+              class="btn-continue-shopping"
+            >
+              Jelajahi Produk
+            </a>
+          </h4>
+          <!-- CART FOOTER -->
           <div class="cart-footer-wrapper" v-show="cart.items.length">
             <h4 class="cart-total-text">
               Total: <span>{{ rupiah(cartTotal) }}</span>
@@ -109,6 +146,7 @@
             <div class="form-container">
               <form @submit.prevent="checkoutWa" id="checkoutForm">
                 <h5>Detail Pengiriman</h5>
+
                 <label for="name">
                   <span>Nama</span>
                   <input
@@ -119,6 +157,7 @@
                     required
                   />
                 </label>
+
                 <label for="email">
                   <span>Email</span>
                   <input
@@ -129,6 +168,7 @@
                     required
                   />
                 </label>
+
                 <label for="phone">
                   <span>Phone</span>
                   <input
@@ -140,7 +180,35 @@
                     required
                   />
                 </label>
+                <!-- ==================================================== -->
+                <!-- AREA INFO REKENING (DINAMIS DARI DATA JSON VUE)     -->
+                <!-- ==================================================== -->
+                <div class="info-rekening-box" v-if="daftarRekening.length > 0">
+                  <p class="rekening-title">
+                    💳 Informasi Rekening Pembayaran:
+                  </p>
 
+                  <!-- Loop Otomatis Berdasarkan Jumlah Bank di JSON -->
+                  <div
+                    class="rekening-card"
+                    v-for="rek in daftarRekening"
+                    :key="rek.id"
+                    style="margin-bottom: 8px"
+                  >
+                    <span class="rekening-number">
+                      {{ rek.bankName }}: {{ rek.accountNumber }} <br />
+                      <small>a.n. {{ rek.accountHolder }}</small>
+                    </span>
+                    <!-- Tombol kirim data objek ke fungsi salin -->
+                    <button
+                      type="button"
+                      @click="salinRekening(rek)"
+                      class="btn-copy-rekening"
+                    >
+                      {{ rek.teksTombolSalin }}
+                    </button>
+                  </div>
+                </div>
                 <button
                   :class="['checkout-btn', { 'disabled': !isFormValid }]"
                   type="submit"
@@ -159,19 +227,19 @@
               <use href="assets/icon/feather-sprite.svg#search" />
             </svg>
           </a>
-
-          <a
-            href="#"
+          <!-- CART BUTTON QUANTITY BADGE -->
+          <button
             id="cart-button"
             @click.prevent="isActiveCart = !isActiveCart"
+            :class="{ 'bounce-anim': isCartBouncing }"
           >
             <svg class="feather">
               <use href="assets/icon/feather-sprite.svg#shopping-cart" />
             </svg>
-            <span class="cart-count" v-show="cartQuantity > 0"
+            <span class="quantity-badge" v-show="cartQuantity > 0"
               >{{ cartQuantity }}</span
             >
-          </a>
+          </button>
 
           <a
             href="#"
@@ -264,8 +332,33 @@
           <h2>Produk<span> Kami</span></h2>
         </div>
 
+        <div class="product-filter-tabs">
+          <button
+            :class="['filter-tab', { 'tab-active': currentCategory === 'Semua' }]"
+            @click="currentCategory = 'Semua'"
+          >
+            Semua Koleksi
+          </button>
+          <button
+            :class="['filter-tab', { 'tab-active': currentCategory === 'Extrait De Parfum' }]"
+            @click="currentCategory = 'Extrait De Parfum'"
+          >
+            Extrait De Parfum
+          </button>
+          <button
+            :class="['filter-tab', { 'tab-active': currentCategory === 'Drip Bag Coffee' }]"
+            @click="currentCategory = 'Drip Bag Coffee'"
+          >
+            Artisanal Coffee
+          </button>
+        </div>
+
         <div class="row">
-          <div class="product-card" v-for="item in produkItems" :key="item.id">
+          <div
+            class="product-card"
+            v-for="item in filteredProdukItems"
+            :key="item.id"
+          >
             <div class="product-image-container">
               <span
                 class="discount-badge"
@@ -292,6 +385,7 @@
                     <use href="assets/icon/feather-sprite.svg#eye" />
                   </svg>
                 </a>
+                <!-- Cari bagian ini di baris grid produk utama -->
                 <a
                   href="#"
                   @click.prevent="addToCart(item)"
@@ -310,13 +404,27 @@
               <p class="product-short-desc">
                 {{ item.description.substring(0, 60) }}...
               </p>
+
               <div class="product-price">
-                <span class="current-price">{{ rupiah(item.price) }}</span>
+                <span class="current-price">
+                  <small
+                    style="
+                      font-size: 0.75rem;
+                      font-weight: 400;
+                      color: var(--text-muted);
+                      text-transform: uppercase;
+                      letter-spacing: 0.5px;
+                    "
+                    >Mulai dari</small
+                  >
+                  <br />
+                  {{ rupiah(item.variants[0].price) }}
+                </span>
                 <span
                   class="original-price"
-                  v-if="item.originalPrice > item.price"
+                  v-if="item.variants[0].originalPrice > item.variants[0].price"
                 >
-                  {{ rupiah(item.originalPrice) }}
+                  {{ rupiah(item.variants[0].originalPrice) }}
                 </span>
               </div>
             </div>
@@ -509,11 +617,10 @@
       <!-- MODAL DETAIL PRODUK START -->
       <div
         :class="['modal-container', { 'modal-active': isOpenModal }]"
-        v-if="isOpenModal && selectedItem"
+        v-if="isOpenModal && selectedItem && selectedVariant"
         @click.self="isOpenModal = false"
       >
         <div class="modal-box">
-          <!-- Tombol Close Premium -->
           <button class="modal-close-btn" @click.prevent="isOpenModal = false">
             <svg class="feather">
               <use href="assets/icon/feather-sprite.svg#x" />
@@ -521,13 +628,14 @@
           </button>
 
           <div class="modal-content-split">
-            <!-- Sisi Kiri: Gambar Produk Skala Besar -->
             <div class="modal-image-side">
               <span
                 class="modal-discount-tag"
-                v-if="selectedItem.originalPrice > selectedItem.price"
+                v-if="selectedVariant.originalPrice > selectedVariant.price"
               >
-                Special Offer
+                Save {{ Math.round(((selectedVariant.originalPrice -
+                selectedVariant.price) / selectedVariant.originalPrice) * 100)
+                }}%
               </span>
               <img
                 :src="`assets/produk/${selectedItem.image}`"
@@ -535,30 +643,46 @@
               />
             </div>
 
-            <!-- Sisi Kanan: Informasi Detail -->
             <div class="modal-info-side">
               <div class="info-top">
                 <h5>Xar Project Artisanal</h5>
                 <h2>{{ selectedItem.name }}</h2>
 
+                <!-- HARGA SEKARANG DINAMIS MENGIKUTI VARIAN YANG DIKLIK -->
                 <div class="modal-price-row">
                   <span class="modal-current-price"
-                    >{{ rupiah(selectedItem.price) }}</span
+                    >{{ rupiah(selectedVariant.price) }}</span
                   >
                   <span
                     class="modal-original-price"
-                    v-if="selectedItem.originalPrice > selectedItem.price"
+                    v-if="selectedVariant.originalPrice > selectedVariant.price"
                   >
-                    {{ rupiah(selectedItem.originalPrice) }}
+                    {{ rupiah(selectedVariant.originalPrice) }}
                   </span>
                 </div>
               </div>
 
               <div class="info-middle">
+                <!-- ==================================================== -->
+                <!-- FITUR BARU: PILIHAN VARIAN / UKURAN PREMIUM         -->
+                <!-- ==================================================== -->
+                <div class="variant-selector-wrapper">
+                  <h4>Pilih Ukuran / Varian:</h4>
+                  <div class="variant-pills">
+                    <button
+                      v-for="v in selectedItem.variants"
+                      :key="v.size"
+                      :class="['variant-pill', { 'variant-active': selectedVariant.size === v.size }]"
+                      @click="pilihVarian(v)"
+                    >
+                      {{ v.size }}
+                    </button>
+                  </div>
+                </div>
+
                 <h4>Deskripsi Produk</h4>
                 <p>{{ selectedItem.description }}</p>
 
-                <!-- Detail Tambahan Biar Terlihat Pro (Spesifikasi Parfum/Kopi) -->
                 <div class="product-spec-grid" v-if="selectedItem.specs">
                   <div class="spec-tag">
                     <span>Kategori</span>
@@ -572,14 +696,15 @@
               </div>
 
               <div class="info-bottom">
+                <!-- DIKUNCI: Mengirim objek produk + varian spesifik ke keranjang -->
                 <button
                   class="btn-modal-cart"
-                  @click.prevent="addToCart(selectedItem); isOpenModal = false;"
+                  @click.prevent="addToCart(selectedItem, selectedVariant); isOpenModal = false;"
                 >
                   <svg class="feather">
                     <use href="assets/icon/feather-sprite.svg#shopping-cart" />
                   </svg>
-                  Tambah Ke Keranjang
+                  Tambah Ke Keranjang ({{ selectedVariant.size }})
                 </button>
               </div>
             </div>
@@ -587,6 +712,8 @@
         </div>
       </div>
       <!-- MODAL DETAIL PRODUK END -->
+
+      <!-- INOVICE -->
     </div>
     <!-- VUE END -->
   </body>

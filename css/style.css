@@ -258,34 +258,6 @@ body {
   font-size: 1rem;
 }
 
-/* Badge Quantity Config */
-#cart-button {
-  position: relative;
-  display: inline-flex !important;
-}
-
-#cart-button .cart-count {
-  position: absolute;
-  background-color: #ff4757;
-  color: var(--text-light);
-  border-radius: 50%;
-  font-size: 0.65rem;
-  font-weight: bold;
-  top: -5px;
-  right: -10px;
-  width: 16px;
-  height: 16px;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 1 !important;
-  text-align: center !important;
-  border: 1.5px solid #000000;
-  pointer-events: none;
-}
-
 /* ====================================================
    SHOPPING CART & SIDEBAR STYLES
    ==================================================== */
@@ -397,68 +369,262 @@ body {
   color: #888888 !important;
 }
 
-/* Form Checkout */
+/* Tombol Lanjut Belanja di Keranjang Kosong */
+.empty-cart-status .btn-continue-shopping {
+  display: inline-block;
+  padding: 10px 24px;
+  background-color: var(--primary-color);
+  color: #000000;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.empty-cart-status .btn-continue-shopping:hover {
+  background-color: #f6ff24;
+  box-shadow: 0 5px 15px rgba(229, 245, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* --- TOMBOL CETAK MANUAL DI SIDEBAR --- */
+.btn-print-manual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px;
+  background-color: transparent;
+  border: 1px solid var(--text-dark) !important;
+  color: var(--text-dark);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 0.8rem;
+}
+
+.btn-print-manual:hover {
+  border-color: #000000 !important;
+  background-color: #000000;
+  color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* --- PREMIUM VARIANT PILLS SELECTOR --- */
+.variant-selector-wrapper {
+  margin: 1.5rem 0 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.variant-selector-wrapper h4 {
+  color: var(--text-light) !important;
+  font-size: 0.95rem !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem !important;
+}
+
+.variant-pills {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.variant-pill {
+  padding: 10px 22px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover biasa */
+.variant-pill:hover {
+  border-color: rgba(229, 245, 0, 0.4);
+  color: var(--primary-color);
+}
+
+/* Varian yang sedang aktif dipilih */
+.variant-pill.variant-active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #000000;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(229, 245, 0, 0.15);
+}
+
+/* --- PERBAIKAN STABIL FORM CONTAINER & INPUTS --- */
 .form-container {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: column; /* Memaksa semua elemen mengalir ke bawah */
   border: 1px dashed var(--border-shadow-color-default);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-top: 1rem;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
 }
 
 .form-container h5 {
   color: var(--text-dark);
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-serif);
 }
 
 .form-container form {
   width: 100%;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-container label {
   color: var(--text-dark);
   display: flex;
+  flex-direction: row; /* Teks label dan box input sejajar kiri-kanan */
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+  margin: 0.8rem 0;
+  width: 100%;
 }
 
-.form-container span {
-  text-align: right;
+.form-container label span {
+  width: 25%;
+  text-align: left;
   font-size: 0.95rem;
+  color: var(--text-dark);
+  font-weight: 500;
 }
 
 .form-container input {
   background-color: var(--bg-light);
-  padding: 8px;
+  padding: 8px 12px;
   font-size: 1rem;
-  width: 70%;
-  border: 0;
-  border-bottom: 2px solid var(--border-shadow-color);
+  width: 72%;
+  border: none;
+  border-bottom: 2px solid var(--text-muted);
+  color: #000000;
+  border-radius: 2px;
+  transition: border-color 0.3s ease;
 }
 
+.form-container input:focus {
+  border-bottom-color: var(--border-shadow-color-focus);
+}
+
+/* ====================================================
+   LUXURY DESIGN: COMPONENT INFO REKENING INTERAKTIF
+   ==================================================== */
+.info-rekening-box {
+  margin-top: 1.2rem;
+  background-color: var(--bg-light);
+  padding: 14px 12px;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+  width: 100%;
+}
+
+.info-rekening-box .rekening-title {
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+  text-align: left;
+  font-family: var(--font-sans);
+  letter-spacing: 0.5px;
+}
+
+.info-rekening-box .rekening-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #dcdcdc;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.info-rekening-box .rekening-number {
+  font-size: 0.9rem;
+  color: #000000;
+  font-weight: bold;
+  text-align: left;
+  line-height: 1.3;
+}
+
+.info-rekening-box .rekening-number small {
+  font-weight: 400;
+  color: #666666;
+  font-size: 0.75rem;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Tombol Salin Bergaya Premium */
+.info-rekening-box .btn-copy-rekening {
+  background-color: var(--bg-dark);
+  color: var(--primary-color);
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--bg-dark);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.info-rekening-box .btn-copy-rekening:hover {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  transform: scale(1.03);
+}
+
+.info-rekening-box .btn-copy-rekening:active {
+  transform: scale(0.97);
+}
+
+/* --- TOMBOL PROSES PEMBAYARAN WA --- */
 .form-container .checkout-btn {
-  margin-top: 1.5rem;
-  display: inline-block;
+  margin-top: 0.8rem;
+  display: block;
   width: 100%;
   font-family: var(--font-sans);
   text-transform: uppercase;
   letter-spacing: 2px;
   background: var(--primary-color);
-  color: black;
+  color: #000000;
   font-weight: 600;
-  padding: 12px;
+  padding: 13px;
+  border: none;
+  border-radius: 4px;
   transition: all 0.3s ease;
   cursor: pointer;
+  text-align: center;
+}
+
+.form-container .checkout-btn:hover {
+  background-color: #f6ff24;
 }
 
 .form-container .checkout-btn.disabled {
-  background-color: #999;
+  background-color: #999999;
   cursor: not-allowed;
   opacity: 0.65;
 }
@@ -832,7 +998,56 @@ body {
   font-size: 0.95rem;
   color: #444444;
 }
+/* --- PREMIUM PRODUCT FILTER TABS --- */
+.product-filter-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
 
+.filter-tab {
+  padding: 12px 28px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 30px; /* Membuat bentuk kapsul melingkar yang modern */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover effect */
+.filter-tab:hover {
+  border-color: rgba(229, 245, 0, 0.3);
+  color: var(--text-light);
+}
+
+/* Tab Kategori Aktif */
+.filter-tab.tab-active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #000000;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(229, 245, 0, 0.15);
+}
+
+/* Responsif untuk Layar HP */
+@media (max-width: 478px) {
+  .product-filter-tabs {
+    gap: 0.8rem;
+    margin-bottom: 2.5rem;
+  }
+  .filter-tab {
+    padding: 8px 18px;
+    font-size: 0.8rem;
+  }
+}
 /* ====================================================
    CONTACT / HUBUNGI KAMI SECTION STYLES
    ==================================================== */
@@ -1359,6 +1574,44 @@ footer {
   color: #000000;
   box-shadow: 0 10px 20px rgba(229, 245, 0, 0.1);
 }
+/* --- TOMBOL CLOSE KERANJANG BELANJA (MOBILE FIRST) --- */
+.cart-close-btn {
+  display: none; /* Sembunyikan secara default di layar laptop/desktop */
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: var(--text-dark);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.cart-close-btn:hover {
+  background-color: #ff4757;
+  color: var(--text-light);
+  border-color: transparent;
+}
+
+/* ====================================================
+   ANTI-BUG PRINT ENGINE (SEMBUNYI SAAT BROWSING)
+   ==================================================== */
+.print-area {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  width: 210mm; /* Mengunci lebar kertas A4 standar */
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
 
 /* ====================================================
    MEDIA QUERIES (RESPONSIVE ENGINE)
@@ -1499,6 +1752,94 @@ footer {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
+
+  /* --- AKTIFKAN TOMBOL DI LAYAR SMARTPHONE --- */
+  .cart-close-btn {
+    display: flex; /* Munculkan tombol X hanya ketika dibuka lewat HP/Tablet */
+  }
+
+  /* Sedikit penyesuaian judul keranjang di HP agar tidak tabrakan dengan tombol X */
+  .shopping-cart > h3 {
+    padding-right: 3rem;
+  }
+}
+/* --- RESET & PERBAIKAN BUTTON KERANJANG NAVBAR --- */
+#cart-button {
+  position: relative;
+  display: inline-flex !important;
+  background: transparent !important; /* Menghapus background abu-abu bawaan browser */
+  border: none !important; /* Menghapus border bawaan */
+  padding: 0 !important; /* Menghapus padding bawaan button */
+  cursor: pointer;
+  color: var(--text-light);
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+/* Memastikan efek hover warna kuningnya tetap berjalan lancar */
+#cart-button:hover {
+  color: var(--primary-color);
+}
+
+#cart-button .quantity-badge {
+  position: absolute;
+  top: -5px; /* Sesuaikan jarak dari atas */
+  right: -5px; /* Sesuaikan jarak dari kanan */
+  background-color: #ff4757; /* Warna merah premium, atau ganti var(--primary-color) jika ingin kuning */
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  padding: 2px;
+  border-radius: 50%; /* Mengunci bentuk lingkaran sempurna */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+
+  /* PENGAMAN: Mencegah badge ikut penyok saat tombol di-scale */
+  transform: scale(1) !important;
+  transform-origin: center;
+}
+
+/* ====================================================
+   PREMIUM MICRO-INTERACTION & FLUID ANIMATIONS
+   ==================================================== */
+
+/* Animasi Badge Angka di Navbar */
+.bounce-anim {
+  animation: fluidBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes fluidBounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.4); /* Efek pop-up membesar yang tegas */
+    color: var(--primary-color);
+  }
+  60% {
+    transform: scale(0.85); /* Sedikit menciut sebelum kembali normal */
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Sentuhan Pro: Efek Transisi Smooth Pada Semua Tombol Cart & Overlay */
+.action-btn,
+#cart-button,
+.btn-modal-cart {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Efek Hover Mengembang Mewah pada Tombol Keranjang Utama */
+#cart-button:hover {
+  color: var(--primary-color);
+  transform: translateY(-2px);
 }
 
 /* Small Screens (HP Jadul / Kecil) */
