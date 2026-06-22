@@ -28,7 +28,11 @@ createApp({
       isActiveSearch: false,
       isActiveCart: false,
 
-      isOpenModal: false,
+      isActiveModal: false, // Mengontrol buka/tutup modal
+      activeItem: null, // Menyimpan data produk yang sedang diklik
+      currentSize: "", // Menyimpan varian ukuran yang dipilih
+      selectedPrice: 0, // Menyimpan harga dari varian yang aktif
+      modalQty: 1, // Jumlah item yang mau dibeli di dalam modal
       selectedItem: null,
       selectedVariant: null, // MENGUNCI VARIAN YANG SEDANG DIPILIH DI MODAL
     };
@@ -145,20 +149,20 @@ createApp({
         grabCursor: true,
         spaceBetween: 20,
         slidesPerView: 1,
-        centeredSlides: true, // INI KUNCI UTAMA: Memaksa slide selalu di tengah
+        centeredSlides: true,
         speed: 500,
         breakpoints: {
-          640: { slidesPerView: 2, centeredSlides: false }, // Kalau sudah banyak produk, bisa false agar scrolling alami
+          640: { slidesPerView: 2, centeredSlides: false },
           1024: { slidesPerView: 3, centeredSlides: false },
           1400: { slidesPerView: 4, centeredSlides: false },
         },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
         },
       });
     },
-    // Tambahkan di dalam methods: { ... }
+
     getAvailableVariants(productId) {
       const product = this.produkItems.find((p) => p.id === productId);
       return product ? product.variants : [];
@@ -192,16 +196,12 @@ createApp({
         cartItem.total = cartItem.quantity * newVariantData.price;
       }
     },
-    // --- FITUR PRESTASI: COPY TO CLIPBOARD DARI DATA JSON ---
+
     salinRekening(rekening) {
-      // Mengambil nomor rekening secara dinamis dari object JSON yang diklik
       navigator.clipboard
         .writeText(rekening.accountNumber)
         .then(() => {
-          // Ubah teks tombol bank yang bersangkutan sesaat
           rekening.teksTombolSalin = "Tersalin! ✔";
-
-          // Kembalikan ke teks "Salin" setelah 2 detik
           setTimeout(() => {
             rekening.teksTombolSalin = "Salin";
           }, 2000);
@@ -210,35 +210,82 @@ createApp({
           alert("Gagal menyalin otomatis, Bro. Silakan salin manual.");
         });
     },
-    // --- TOMBOL CETAK MANUAL MANDIRI ---
+
     cetakPdfInvoice() {
       if (this.cart.items.length === 0) {
         alert("Keranjang belanja kamu masih kosong, Bro!");
         return;
       }
-      // Panggil jendela print sistem bawaan OS
       window.print();
     },
-    // --- MEMBUKA MODAL & OTOMATIS SET VARIAN PERTAMA ---
+
+    // --- LOGIKA MODAL (TULISAN 'METHODS' YANG NYELIP DI SINI SUDAH DIBUANG) ---
     bukaDetail(item) {
-      this.selectedItem = item;
-      this.selectedVariant = item.variants[0]; // Default: pilih varian pertama (misal 10ml)
-      this.isOpenModal = true;
+      this.activeItem = item;
+      this.modalQty = 1;
+
+      if (item.variants && item.variants.length > 0) {
+        this.currentSize = item.variants[0].size;
+        this.selectedPrice = item.variants[0].price;
+      } else {
+        this.currentSize = "";
+        this.selectedPrice = item.price || 0;
+      }
+
+      this.isActiveModal = true;
+      document.body.style.overflow = "hidden";
     },
 
-    // --- MENGGANTI HARGA SAAT VARIAN DIKLIK DI MODAL ---
+    tutupDetail() {
+      this.isActiveModal = false;
+      document.body.style.overflow = "auto";
+      setTimeout(() => {
+        this.activeItem = null;
+      }, 400);
+    },
+
+    tambahQtyModal() {
+      this.modalQty++;
+    },
+    kurangiQtyModal() {
+      if (this.modalQty > 1) this.modalQty--;
+    },
+
+    pilihUkuran(price, size) {
+      this.selectedPrice = price;
+      this.currentSize = size;
+    },
+
+    tambahKeKeranjangDariModal() {
+      if (!this.activeItem) return;
+
+      // Membuat format payload objek agar pas dengan data yang dibutuhkan addToCart
+      const payloadProduk = {
+        id: this.activeItem.id,
+        name: this.activeItem.name,
+        image: this.activeItem.image,
+      };
+
+      const payloadVarian = {
+        size: this.currentSize,
+        price: this.selectedPrice,
+      };
+
+      // Kita panggil fungsi utama addToCart kamu dengan menyuntikkan varian dan quantity-nya
+      for (let i = 0; i < this.modalQty; i++) {
+        this.addToCart(payloadProduk, payloadVarian);
+      }
+
+      this.tutupDetail();
+    },
+
     pilihVarian(variant) {
       this.selectedVariant = variant;
     },
 
-    // --- MANIPULASI KERANJANG (MENDUKUNG MULTI-VARIAN) ---
     addToCart(product, customVariant = null) {
-      // Jika dimasukkan dari card utama (bukan dari modal), otomatis pakai varian termurah (index 0)
       const variantYangDipilih = customVariant || product.variants[0];
-
-      // Kunci ID unik gabungan antara ID produk + Ukuran Varian (agar 10ml dan 50ml terpisah di keranjang)
       const uniqueCartId = `${product.id}-${variantYangDipilih.size}`;
-
       const cartItem = this.cart.items.find(
         (item) => item.cartId === uniqueCartId,
       );
@@ -258,13 +305,11 @@ createApp({
         cartItem.quantity++;
         cartItem.total = cartItem.price * cartItem.quantity;
       }
-      // ====================================================
-      // Pemicu Animasi Bounce pada Ikon Keranjang di Navbar
-      // ====================================================
+
       this.isCartBouncing = true;
       setTimeout(() => {
         this.isCartBouncing = false;
-      }, 500); // Matikan efek setelah 500ms (0.5 detik) agar bisa dipakai lagi
+      }, 500);
     },
 
     removeFromCart(cartId) {
@@ -384,7 +429,7 @@ _Mohon tunggu sebentar ya Kak, Admin kami akan segera memverifikasi ketersediaan
       this.contactForm.phone = "";
       this.contactForm.message = "";
     },
-
+    // covert rupiah
     rupiah(number) {
       return new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -392,13 +437,16 @@ _Mohon tunggu sebentar ya Kak, Admin kami akan segera memverifikasi ketersediaan
         minimumFractionDigits: 0,
       }).format(number);
     },
+    // toggle search
     toggleSearch() {
       this.isActiveSearch = !this.isActiveSearch;
       if (this.isActiveSearch) {
-        nextTick(() => {
-          const sb = document.getElementById("search-box");
-          if (sb) sb.focus();
+        // Otomatis fokus ke input text box saat form search terbuka
+        this.$nextTick(() => {
+          document.getElementById("search-box").focus();
         });
+      } else {
+        this.searchQuery = ""; // Reset keyword pencarian saat ditutup
       }
     },
   },

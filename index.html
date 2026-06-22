@@ -78,29 +78,36 @@
           </div>
         </div>
 
-        <!-- SHOPPING CART -->
+        <!-- SHOPPING CART SIDEBAR START -->
         <div :class="['shopping-cart', { 'active': isActiveCart }]">
-          <!-- Sentuhan Pro: Tombol Close Khusus Mobile/HP -->
-          <button class="cart-close-btn" @click.prevent="isActiveCart = false">
+          <!-- Tombol Close Premium -->
+          <button
+            class="cart-close-btn"
+            @click.prevent="isActiveCart = false"
+            aria-label="Close Cart"
+          >
             <svg class="feather">
               <use href="assets/icon/feather-sprite.svg#x" />
             </svg>
           </button>
 
-          <h3>Keranjang Belanja</h3>
+          <h3 class="cart-sidebar-title">Keranjang Belanja</h3>
 
-          <!-- Cari bagian ini di dalam shopping-cart index.html Anda -->
+          <!-- WRAPPER ITEM PRODUK DI KERANJANG -->
           <div class="cart-items-wrapper" v-show="cart.items.length">
             <div
               class="cart-item"
               v-for="item in cart.items"
               :key="item.cartId"
             >
-              <!-- Ganti :key ke item.cartId -->
-              <img :src="`assets/produk/${item.image}`" :alt="item.name" />
+              <div class="cart-item-img-box">
+                <img :src="`assets/produk/${item.image}`" :alt="item.name" />
+              </div>
+
               <div class="cart-item-details">
-                <h3>{{ item.name }}</h3>
-                <!-- TAMBAHAN: Tampilkan Varian Ukuran Elegan di bawah judul produk -->
+                <h3 class="cart-item-name">{{ item.name }}</h3>
+
+                <!-- Pilihan Varian Minimalis -->
                 <div class="cart-variant-selector">
                   <span>Varian:</span>
                   <select
@@ -116,32 +123,40 @@
                     </option>
                   </select>
                 </div>
-                <div class="item-price">
-                  <span class="current-price">{{ rupiah(item.price) }}</span> ×
-                  <!-- PERBAIKAN: Operasikan item.cartId ke fungsi remove -->
-                  <button id="qty-remove" @click="removeFromCart(item.cartId)">
-                    −
-                  </button>
-                  <span class="quantity">{{ item.quantity }}</span>
-                  <!-- PERBAIKAN: Operasikan item ke fungsi add -->
-                  <button id="qty-add" @click="addToCart(item, item)">
-                    &plus;
-                  </button>
-                  &equals;
-                  <span class="total-price">{{ rupiah(item.total) }}</span>
+
+                <!-- Kontrol Kuantitas & Harga Modern -->
+                <div class="cart-item-price-row">
+                  <span class="cart-current-price"
+                    >{{ rupiah(item.price) }}</span
+                  >
+
+                  <div class="cart-qty-control">
+                    <button
+                      class="cart-qty-btn"
+                      @click="removeFromCart(item.cartId)"
+                    >
+                      −
+                    </button>
+                    <span class="cart-qty-value">{{ item.quantity }}</span>
+                    <button class="cart-qty-btn" @click="addToCart(item, item)">
+                      &plus;
+                    </button>
+                  </div>
+
+                  <span class="cart-item-total">{{ rupiah(item.total) }}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <h4 v-show="!cart.items.length" class="empty-cart-status">
-            <div class="keranjang-kosong">
+          <!-- STATUS KERANJANG KOSONG -->
+          <div v-show="!cart.items.length" class="empty-cart-status">
+            <div class="keranjang-kosong-icon">
               <svg class="feather">
                 <use href="assets/icon/feather-sprite.svg#shopping-cart" />
               </svg>
             </div>
-            <p style="margin-bottom: 1.5rem">Keranjang Anda Kosong</p>
-
+            <p>Keranjang Anda Kosong</p>
             <a
               href="#product"
               @click="isActiveCart = false"
@@ -149,70 +164,70 @@
             >
               Jelajahi Produk
             </a>
-          </h4>
-          <!-- CART FOOTER -->
-          <div class="cart-footer-wrapper" v-show="cart.items.length">
-            <h4 class="cart-total-text">
-              Total: <span>{{ rupiah(cartTotal) }}</span>
-            </h4>
-            <!-- CHECKOUT FORM -->
-            <div class="form-container">
-              <form @submit.prevent="checkoutWa" id="checkoutForm">
-                <h5>Detail Pengiriman</h5>
+          </div>
 
-                <label for="name">
-                  <span>Nama</span>
+          <!-- FOOTER KERANJANG & DETAIL PENGIRIMAN -->
+          <div class="cart-footer-wrapper" v-show="cart.items.length">
+            <div class="cart-total-row">
+              <h4>Total Pembayaran:</h4>
+              <span class="cart-grand-total">{{ rupiah(cartTotal) }}</span>
+            </div>
+
+            <!-- FORM PENGIRIMAN PREMIUM -->
+            <div class="cart-form-container">
+              <form @submit.prevent="checkoutWa" id="checkoutForm">
+                <h5 class="cart-form-title">Detail Pengiriman</h5>
+
+                <div class="cart-input-box">
                   <input
                     type="text"
                     name="name"
-                    id="name"
+                    id="cart-name"
                     v-model="customer.name"
                     required
+                    placeholder=" "
                   />
-                </label>
+                  <label for="cart-name">Nama Lengkap</label>
+                </div>
 
-                <label for="email">
-                  <span>Email</span>
+                <div class="cart-input-box">
                   <input
                     type="email"
                     name="email"
-                    id="email"
+                    id="cart-email"
                     v-model="customer.email"
                     required
+                    placeholder=" "
                   />
-                </label>
+                  <label for="cart-email">Alamat Email</label>
+                </div>
 
-                <label for="phone">
-                  <span>Phone</span>
+                <div class="cart-input-box">
                   <input
                     type="number"
                     name="phone"
-                    id="phone"
+                    id="cart-phone"
                     autocomplete="off"
                     v-model="customer.phone"
                     required
+                    placeholder=" "
                   />
-                </label>
-                <!-- ==================================================== -->
-                <!-- AREA INFO REKENING (DINAMIS DARI DATA JSON VUE)     -->
-                <!-- ==================================================== -->
-                <div class="info-rekening-box" v-if="daftarRekening.length > 0">
-                  <p class="rekening-title">
-                    💳 Informasi Rekening Pembayaran:
-                  </p>
+                  <label for="cart-phone">Nomor WhatsApp</label>
+                </div>
 
-                  <!-- Loop Otomatis Berdasarkan Jumlah Bank di JSON -->
+                <!-- AREA REKENING OTOMATIS -->
+                <div class="cart-rekening-box" v-if="daftarRekening.length > 0">
+                  <p class="rekening-title">💳 Rekening Pembayaran:</p>
                   <div
                     class="rekening-card"
                     v-for="rek in daftarRekening"
                     :key="rek.id"
-                    style="margin-bottom: 8px"
                   >
                     <span class="rekening-number">
-                      {{ rek.bankName }}: {{ rek.accountNumber }} <br />
+                      <strong>{{ rek.bankName }}</strong>: {{ rek.accountNumber
+                      }}<br />
                       <small>a.n. {{ rek.accountHolder }}</small>
                     </span>
-                    <!-- Tombol kirim data objek ke fungsi salin -->
                     <button
                       type="button"
                       @click="salinRekening(rek)"
@@ -222,29 +237,38 @@
                     </button>
                   </div>
                 </div>
+
                 <button
-                  :class="['checkout-btn', { 'disabled': !isFormValid }]"
+                  :class="['cart-checkout-btn', { 'disabled': !isFormValid }]"
                   type="submit"
                   :disabled="!isFormValid"
                 >
-                  Proses Pembayaran
+                  Proses Pembayaran via WhatsApp
                 </button>
               </form>
             </div>
           </div>
         </div>
+        <!-- SHOPPING CART SIDEBAR END -->
         <!-- NAVBAR EXTRA -->
         <div class="navbar-extra">
-          <a href="#" id="search-button" @click.prevent="toggleSearch">
+          <button
+            id="search-button"
+            @click.prevent="toggleSearch"
+            aria-label="Toggle Search"
+          >
             <svg class="feather">
-              <use href="assets/icon/feather-sprite.svg#search" />
+              <use
+                :href="`assets/icon/feather-sprite.svg#${isActiveSearch ? 'x' : 'search'}`"
+              />
             </svg>
-          </a>
-          <!-- CART BUTTON QUANTITY BADGE -->
+          </button>
+
           <button
             id="cart-button"
             @click.prevent="isActiveCart = !isActiveCart"
             :class="{ 'bounce-anim': isCartBouncing }"
+            aria-label="Open Cart"
           >
             <svg class="feather">
               <use href="assets/icon/feather-sprite.svg#shopping-cart" />
@@ -254,83 +278,102 @@
             >
           </button>
 
-          <a
-            href="#"
+          <button
             id="hamburger"
             @click.prevent="isActiveNavbar = !isActiveNavbar"
+            aria-label="Toggle Menu"
           >
             <svg class="feather">
               <use href="assets/icon/feather-sprite.svg#menu" />
             </svg>
-          </a>
+          </button>
         </div>
       </nav>
       <!-- NAVBAR END -->
+
       <!-- SECTION HOME START -->
       <section id="home" class="hero">
+        <!-- Elemen overlay gradasi gelap agar teks super kontras dan mudah dibaca -->
+        <div class="hero-overlay"></div>
+
         <main class="content">
+          <h5 class="hero-tagline">Artisanal Craftsmanship</h5>
           <h1>
-            Kami meracik setiap produk dengan <span>penuh perhatian</span>
+            Meracik Batas Antara <br />
+            <span>Aroma & Rasa</span>
           </h1>
           <p>
-            Kami menyediakan berbagai produk berkualitas untuk memenuhi
-            kebutuhan Anda. Jelajahi koleksi kami dan temukan apa yang Anda
-            cari!
+            Eksplorasi mahakarya *Extrait de Parfum* berkonsentrasi tinggi dan
+            kurasi kopi pilihan. Dibuat manual dalam jumlah terbatas untuk Anda
+            yang menghargai identitas.
           </p>
-          <a href="#product" class="cta">Lihat Produk</a>
+          <div class="hero-buttons">
+            <a href="#product" class="cta-primary">Jelajahi Koleksi</a>
+            <a href="#about" class="cta-secondary">The Story</a>
+          </div>
         </main>
       </section>
       <!-- SECTION HOME END -->
+
       <!-- SECTION ABOUT START -->
       <section id="about" class="about">
-        <div class="about-header">
-          <h5>The Story Behind</h5>
-          <h2><span>Tentang</span> Xar Project</h2>
-        </div>
-
-        <div class="row">
-          <div class="about-img">
-            <img
-              src="assets/background/bg-about.jpg"
-              alt="Proses Kreatif Xar Project"
-            />
-            <div class="img-decorator"></div>
+        <div class="about-container">
+          <div class="about-header">
+            <h5 class="about-tagline">The Story Behind</h5>
+            <h2><span>Tentang</span> Xar Project</h2>
           </div>
 
-          <div class="content">
-            <h3>Sensasi Aroma & Rasa yang Dikurasi</h3>
-            <p>
-              Xar Project lahir dari sebuah obsesi untuk mengeksplorasi batas
-              antara aroma yang memikat dan rasa kopi yang mendalam. Kami
-              percaya bahwa parfum yang Anda kenakan dan kopi yang Anda nikmati
-              adalah representasi identitas Anda.
-            </p>
-            <p>
-              Setiap botol *Extrait De Parfum* dan setiap kantong *Drip Bag
-              Coffee* kami diracik secara manual (handmade) dalam jumlah
-              terbatas untuk memastikan presisi, kualitas, dan keunikan yang
-              tidak akan Anda temukan di produk massal.
-            </p>
+          <div class="about-row">
+            <!-- SISI KIRI: VISUAL KREATIF -->
+            <div class="about-img-wrapper">
+              <img
+                src="assets/background/about-bg.jpg"
+                alt="Proses Kreatif Xar Project"
+                class="about-img"
+              />
+              <div class="img-decorator"></div>
+              <div class="img-glow-effect"></div>
+              <!-- Sentuhan pro aura melayang -->
+            </div>
 
-            <div class="about-features">
-              <div class="feature-item">
-                <span class="feature-number">01</span>
-                <div class="feature-text">
-                  <h4>Premium Grade</h4>
-                  <p>
-                    Menggunakan bahan baku konsentrat tertinggi untuk ketahanan
-                    ekstra.
-                  </p>
+            <!-- SISI KANAN: NARASI BRAND -->
+            <div class="about-content">
+              <h3>Sensasi Aroma & Rasa yang Dikurasi</h3>
+              <p class="about-lead">
+                Xar Project lahir dari sebuah obsesi untuk mengeksplorasi batas
+                antara aroma yang memikat dan karakter rasa kopi yang mendalam.
+              </p>
+              <p>
+                Kami percaya bahwa parfum yang Anda kenakan dan kopi yang Anda
+                nikmati adalah representasi paling jujur dari identitas Anda.
+                Setiap botol <em>Extrait De Parfum</em> berkonsentrasi tinggi
+                dan setiap kantong <em>Drip Bag Coffee</em> kami diracik secara
+                manual (handmade) dalam jumlah terbatas untuk memastikan presisi
+                tinggi yang tidak akan ditemukan pada produk massal.
+              </p>
+
+              <!-- FITUR UTAMA -->
+              <div class="about-features">
+                <div class="feature-item">
+                  <span class="feature-number">01</span>
+                  <div class="feature-text">
+                    <h4>Premium Concentration</h4>
+                    <p>
+                      Formulasi konsentrat tertinggi untuk kekuatan aroma yang
+                      bertahan ekstra sepanjang hari.
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-number">02</span>
-                <div class="feature-text">
-                  <h4>Artisanal Blend</h4>
-                  <p>
-                    Diracik dengan presisi oleh tangan ahli, bukan mesin
-                    otomatis.
-                  </p>
+
+                <div class="feature-item">
+                  <span class="feature-number">02</span>
+                  <div class="feature-text">
+                    <h4>Artisanal Blend</h4>
+                    <p>
+                      Setiap detail dikurasi dan diracik secara manual, menjaga
+                      eksklusivitas di setiap rilisan.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -338,12 +381,16 @@
         </div>
       </section>
       <!-- SECTION ABOUT END -->
+
       <!-- SECTION PRODUK START -->
+      <!-- SECTION PRODUK (SPOTIFY STYLE) START -->
       <section id="product" class="product">
-        <div class="about-header">
-          <h5>our curated collection</h5>
+        <div class="product-header">
+          <h5 class="produk-tagline">our curated collection</h5>
           <h2>Produk <span>Kami</span></h2>
         </div>
+
+        <!-- Filter Tab Kategori -->
         <div class="produk-filter-tabs" v-if="kategoriItems.length > 0">
           <button
             v-for="kat in kategoriItems"
@@ -356,6 +403,7 @@
           </button>
         </div>
 
+        <!-- Swiper Container -->
         <div class="swiper produk-swiper spotify-swiper">
           <div class="swiper-wrapper">
             <div
@@ -364,6 +412,7 @@
               :key="item.id"
             >
               <div class="product-card">
+                <!-- Ketika gambar diklik, memicu fungsi bukaDetail -->
                 <div class="product-image" @click="bukaDetail(item)">
                   <img :src="`assets/produk/${item.image}`" :alt="item.name" />
                 </div>
@@ -382,12 +431,104 @@
               </div>
             </div>
           </div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
+          <!-- Pagination Dots -->
+          <div class="swiper-pagination"></div>
         </div>
       </section>
       <!-- SECTION PRODUK END -->
-      <!-- SECTION KONTAK START -->
+
+      <!-- ====================================================
+     MODAL DETAIL PRODUK (TARUH DI SINI BRO)
+     ==================================================== -->
+      <div
+        :class="['product-detail-modal', { 'modal-active': isActiveModal }]"
+        v-if="activeItem"
+        @click.self="tutupDetail"
+      >
+        <div class="modal-content-wrapper">
+          <!-- Tombol Tutup -->
+          <button
+            class="modal-close-btn"
+            @click.prevent="tutupDetail"
+            aria-label="Close Modal"
+          >
+            <svg class="feather">
+              <use href="assets/icon/feather-sprite.svg#x" />
+            </svg>
+          </button>
+
+          <div class="modal-grid">
+            <!-- Kiri: Gambar -->
+            <div class="modal-image-box">
+              <img
+                :src="`assets/produk/${activeItem.image}`"
+                :alt="activeItem.name"
+                class="modal-main-img"
+              />
+            </div>
+
+            <!-- Kanan: Detail & Opsi -->
+            <div class="modal-info-box">
+              <span class="modal-category-tag">{{ activeItem.category }}</span>
+              <h2 class="modal-product-title">{{ activeItem.name }}</h2>
+
+              <div class="modal-price-tag">
+                <span class="modal-price-value"
+                  >{{ rupiah(selectedPrice) }}</span
+                >
+              </div>
+
+              <p class="modal-product-desc">{{ activeItem.description }}</p>
+
+              <!-- Pilihan Varian Pill Style -->
+              <div
+                class="modal-variant-section"
+                v-if="activeItem.variants && activeItem.variants.length > 0"
+              >
+                <h4>Pilih Ukuran / Varian:</h4>
+                <div class="variant-pill-group">
+                  <label
+                    v-for="v in activeItem.variants"
+                    :key="v.size"
+                    :class="['variant-pill', { 'pill-active': currentSize === v.size }]"
+                  >
+                    <input
+                      type="radio"
+                      name="modal-size"
+                      :value="v.size"
+                      v-model="currentSize"
+                      @change="pilihUkuran(v.price, v.size)"
+                    />
+                    {{ v.size }}
+                  </label>
+                </div>
+              </div>
+
+              <!-- Qty & Add to Cart -->
+              <div class="modal-action-row">
+                <div class="modal-qty-box">
+                  <button class="modal-qty-btn" @click="kurangiQtyModal">
+                    −
+                  </button>
+                  <span class="modal-qty-value">{{ modalQty }}</span>
+                  <button class="modal-qty-btn" @click="tambahQtyModal">
+                    &plus;
+                  </button>
+                </div>
+
+                <button
+                  class="modal-add-to-cart-btn"
+                  @click="tambahKeKeranjangDariModal"
+                >
+                  Masukkan ke Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SECTION PRODUK END -->
+
       <!-- SECTION KONTAK START -->
       <section id="contact" class="contact">
         <div class="contact-container">
@@ -517,23 +658,32 @@
         </div>
       </section>
       <!-- SECTION KONTAK END -->
-      <!-- SECTION KONTAK END -->
+
       <!-- FOOTER START -->
-      <footer>
+      <footer class="site-footer">
         <div class="footer-container">
-          <div class="footer-box branding">
-            <a href="#" class="logo">xar<span>project</span>.</a>
-            <p>
+          <!-- KOLOM 1: BRANDING & SOSIAL MEDIA -->
+          <div class="footer-box footer-branding">
+            <a href="#" class="footer-logo">xar<span>project</span>.</a>
+            <p class="footer-desc">
               Meracik setiap produk dengan penuh perhatian untuk memberikan
               kualitas aroma dan rasa terbaik langsung ke tangan Anda.
             </p>
             <div class="footer-social">
-              <a href="https://www.instagram.com/xar.project/" target="_blank">
+              <a
+                href="https://www.instagram.com/xar.project/"
+                target="_blank"
+                aria-label="Instagram"
+              >
                 <svg class="feather">
                   <use href="assets/icon/feather-sprite.svg#instagram" />
                 </svg>
               </a>
-              <a href="https://shopee.co.id/amboo.id" target="_blank">
+              <a
+                href="https://shopee.co.id/amboo.id"
+                target="_blank"
+                aria-label="Shopee"
+              >
                 <svg class="feather">
                   <use href="assets/icon/feather-sprite.svg#shopping-bag" />
                 </svg>
@@ -541,135 +691,46 @@
             </div>
           </div>
 
-          <div class="footer-box links">
+          <!-- KOLOM 2: NAVIGASI CEPAT -->
+          <div class="footer-box footer-links">
             <h3>Penjelajahan</h3>
-            <a href="#home">Home</a>
-            <a href="#about">Tentang Kami</a>
-            <a href="#product">Produk</a>
-            <a href="#contact">Kontak</a>
+            <div class="links-grid">
+              <a href="#home">Home</a>
+              <a href="#about">Tentang Kami</a>
+              <a href="#product">Produk</a>
+              <a href="#contact">Kontak</a>
+            </div>
           </div>
 
-          <div class="footer-box info">
+          <!-- KOLOM 3: INFORMASI HUBUNGI -->
+          <div class="footer-box footer-info">
             <h3>Hubungi Kami</h3>
             <p><strong>Email:</strong> support@xarproject.com</p>
             <p><strong>WhatsApp:</strong> +62 851-7172-3607</p>
             <p><strong>Jam Kerja:</strong> Setiap Hari (09:00 - 21:00 WIB)</p>
           </div>
 
-          <div class="footer-box payment-gate">
+          <!-- KOLOM 4: PAYMENT GATEWAY BADGE -->
+          <div class="footer-box footer-payment">
             <h3>Metode Pembayaran</h3>
             <p class="muted-text">Pembayaran aman otomatis didukung oleh:</p>
-            <span class="badge-payment">Midtrans Secure</span>
-            <span class="badge-payment">QRIS / E-Wallet</span>
+            <div class="payment-badges">
+              <span class="badge-payment">Midtrans Secure</span>
+              <span class="badge-payment">QRIS / E-Wallet</span>
+            </div>
           </div>
         </div>
 
+        <!-- BAGIAN BAWAH / COPYRIGHT -->
         <div class="footer-bottom">
-          <p>© 2026 Xar Project. All rights reserved.</p>
+          <p>&copy; 2026 Xar Project. All rights reserved.</p>
         </div>
       </footer>
       <!-- FOOTER END -->
-      <!-- MODAL DETAIL PRODUK START -->
-      <div
-        :class="['modal-container', { 'modal-active': isOpenModal }]"
-        v-if="isOpenModal && selectedItem && selectedVariant"
-        @click.self="isOpenModal = false"
-      >
-        <div class="modal-box">
-          <button class="modal-close-btn" @click.prevent="isOpenModal = false">
-            <svg class="feather">
-              <use href="assets/icon/feather-sprite.svg#x" />
-            </svg>
-          </button>
-
-          <div class="modal-content-split">
-            <div class="modal-image-side">
-              <span
-                class="modal-discount-tag"
-                v-if="selectedVariant.originalPrice > selectedVariant.price"
-              >
-                Save {{ Math.round(((selectedVariant.originalPrice -
-                selectedVariant.price) / selectedVariant.originalPrice) * 100)
-                }}%
-              </span>
-              <img
-                :src="`assets/produk/${selectedItem.image}`"
-                :alt="selectedItem.name"
-              />
-            </div>
-
-            <div class="modal-info-side">
-              <div class="info-top">
-                <h5>Xar Project Artisanal</h5>
-                <h2>{{ selectedItem.name }}</h2>
-
-                <!-- HARGA SEKARANG DINAMIS MENGIKUTI VARIAN YANG DIKLIK -->
-                <div class="modal-price-row">
-                  <span class="modal-current-price"
-                    >{{ rupiah(selectedVariant.price) }}</span
-                  >
-                  <span
-                    class="modal-original-price"
-                    v-if="selectedVariant.originalPrice > selectedVariant.price"
-                  >
-                    {{ rupiah(selectedVariant.originalPrice) }}
-                  </span>
-                </div>
-              </div>
-
-              <div class="info-middle">
-                <!-- ==================================================== -->
-                <!-- FITUR BARU: PILIHAN VARIAN / UKURAN PREMIUM         -->
-                <!-- ==================================================== -->
-                <div class="variant-selector-wrapper">
-                  <h4>Pilih Ukuran / Varian:</h4>
-                  <div class="variant-pills">
-                    <button
-                      v-for="v in selectedItem.variants"
-                      :key="v.size"
-                      :class="['variant-pill', { 'variant-active': selectedVariant.size === v.size }]"
-                      @click="pilihVarian(v)"
-                    >
-                      {{ v.size }}
-                    </button>
-                  </div>
-                </div>
-
-                <h4>Deskripsi Produk</h4>
-                <p>{{ selectedItem.description }}</p>
-
-                <div class="product-spec-grid" v-if="selectedItem.specs">
-                  <div class="spec-tag">
-                    <span>Kategori</span>
-                    <strong>{{ selectedItem.specs.category }}</strong>
-                  </div>
-                  <div class="spec-tag">
-                    <span>Info Tambahan</span>
-                    <strong>{{ selectedItem.specs.duration }}</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div class="info-bottom">
-                <!-- DIKUNCI: Mengirim objek produk + varian spesifik ke keranjang -->
-                <button
-                  class="btn-modal-cart"
-                  @click.prevent="addToCart(selectedItem, selectedVariant); isOpenModal = false;"
-                >
-                  <svg class="feather">
-                    <use href="assets/icon/feather-sprite.svg#shopping-cart" />
-                  </svg>
-                  Tambah Ke Keranjang ({{ selectedVariant.size }})
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- MODAL DETAIL PRODUK END -->
 
       <!-- INOVICE -->
     </div>
-    <!-- VUE END -->
+
+    <!-- app END -->
   </body>
 </html>
