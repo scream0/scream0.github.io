@@ -20,6 +20,12 @@
       data-client-key="Mid-client-AmxAh3ynr_EVMKYpi"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script src="js/app.js" defer></script>
   </head>
   <body>
@@ -57,7 +63,9 @@
               <img :src="`assets/produk/${item.image}`" :alt="item.name" />
               <div class="result-info">
                 <h4>{{ item.name }}</h4>
-                <p>{{ rupiah(item.price) }}</p>
+                <p v-if="item.variants && item.variants.length > 0">
+                  Mulai dari {{ rupiah(item.variants[0].price) }}
+                </p>
               </div>
             </div>
             <!-- HASIL CARI TIDAK ADA -->
@@ -93,16 +101,21 @@
               <div class="cart-item-details">
                 <h3>{{ item.name }}</h3>
                 <!-- TAMBAHAN: Tampilkan Varian Ukuran Elegan di bawah judul produk -->
-                <p
-                  style="
-                    font-size: 0.85rem;
-                    color: #888888;
-                    margin-bottom: 0.3rem;
-                  "
-                >
-                  Varian: {{ item.size }}
-                </p>
-
+                <div class="cart-variant-selector">
+                  <span>Varian:</span>
+                  <select
+                    :value="item.size"
+                    @change="updateCartItemVariant(item.cartId, $event.target.value)"
+                  >
+                    <option
+                      v-for="v in getAvailableVariants(item.id)"
+                      :key="v.size"
+                      :value="v.size"
+                    >
+                      {{ v.size }} ({{ rupiah(v.price) }})
+                    </option>
+                  </select>
+                </div>
                 <div class="item-price">
                   <span class="current-price">{{ rupiah(item.price) }}</span> ×
                   <!-- PERBAIKAN: Operasikan item.cartId ke fungsi remove -->
@@ -327,108 +340,49 @@
       <!-- SECTION ABOUT END -->
       <!-- SECTION PRODUK START -->
       <section id="product" class="product">
-        <div class="product-header">
-          <h5>Our Curated Collection</h5>
-          <h2>Produk<span> Kami</span></h2>
+        <div class="about-header">
+          <h2>Produk <span>Kami</span></h2>
         </div>
-
-        <div class="product-filter-tabs">
+        <div class="produk-filter-tabs" v-if="kategoriItems.length > 0">
           <button
-            :class="['filter-tab', { 'tab-active': currentCategory === 'Semua' }]"
-            @click="currentCategory = 'Semua'"
+            v-for="kat in kategoriItems"
+            :key="kat"
+            class="filter-tab"
+            :class="{ active: currentCategory === kat }"
+            @click="currentCategory = kat"
           >
-            Semua Koleksi
-          </button>
-          <button
-            :class="['filter-tab', { 'tab-active': currentCategory === 'Extrait De Parfum' }]"
-            @click="currentCategory = 'Extrait De Parfum'"
-          >
-            Extrait De Parfum
-          </button>
-          <button
-            :class="['filter-tab', { 'tab-active': currentCategory === 'Drip Bag Coffee' }]"
-            @click="currentCategory = 'Drip Bag Coffee'"
-          >
-            Artisanal Coffee
+            {{ kat }}
           </button>
         </div>
 
-        <div class="row">
-          <div
-            class="product-card"
-            v-for="item in filteredProdukItems"
-            :key="item.id"
-          >
-            <div class="product-image-container">
-              <span
-                class="discount-badge"
-                v-if="item.originalPrice > item.price"
-              >
-                Save {{ Math.round(((item.originalPrice - item.price) /
-                item.originalPrice) * 100) }}%
-              </span>
-
-              <img
-                :src="`assets/produk/${item.image}`"
-                :alt="item.name"
-                class="product-img"
-              />
-
-              <div class="product-overlay-actions">
-                <a
-                  href="#"
-                  @click.prevent="bukaDetail(item)"
-                  class="action-btn view-btn"
-                  title="Lihat Detail"
-                >
-                  <svg class="feather">
-                    <use href="assets/icon/feather-sprite.svg#eye" />
-                  </svg>
-                </a>
-                <!-- Cari bagian ini di baris grid produk utama -->
-                <a
-                  href="#"
-                  @click.prevent="addToCart(item)"
-                  class="action-btn cart-btn"
-                  title="Tambah ke Keranjang"
-                >
-                  <svg class="feather">
-                    <use href="assets/icon/feather-sprite.svg#shopping-cart" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            <div class="product-content">
-              <h3>{{ item.name }}</h3>
-              <p class="product-short-desc">
-                {{ item.description.substring(0, 60) }}...
-              </p>
-
-              <div class="product-price">
-                <span class="current-price">
-                  <small
-                    style="
-                      font-size: 0.75rem;
-                      font-weight: 400;
-                      color: var(--text-muted);
-                      text-transform: uppercase;
-                      letter-spacing: 0.5px;
-                    "
-                    >Mulai dari</small
-                  >
-                  <br />
-                  {{ rupiah(item.variants[0].price) }}
-                </span>
-                <span
-                  class="original-price"
-                  v-if="item.variants[0].originalPrice > item.variants[0].price"
-                >
-                  {{ rupiah(item.variants[0].originalPrice) }}
-                </span>
+        <div class="swiper produk-swiper spotify-swiper">
+          <div class="swiper-wrapper">
+            <div
+              class="swiper-slide"
+              v-for="item in filteredProdukItems"
+              :key="item.id"
+            >
+              <div class="product-card">
+                <div class="product-image" @click="bukaDetail(item)">
+                  <img :src="`assets/produk/${item.image}`" :alt="item.name" />
+                </div>
+                <div class="product-content">
+                  <h3>{{ item.name }}</h3>
+                  <div class="product-price">
+                    <span class="current-price">
+                      <small class="price-prefix">Mulai dari</small><br />
+                      {{ rupiah(item.variants[0].price) }}
+                    </span>
+                  </div>
+                  <button class="spotify-add-btn" @click="addToCart(item)">
+                    +
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
         </div>
       </section>
       <!-- SECTION PRODUK END -->

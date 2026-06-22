@@ -6,65 +6,22 @@ createApp({
       // STATE BARU UNTUK TEKS TOMBOL REKENING
       teksTombolSalin: "Salin",
 
-      cart: { items: [] },
+      // LOGIKA KERANJANG: Ambil data lama dari LocalStorage jika ada, jika tidak ada buat array kosong
+      cart: JSON.parse(localStorage.getItem("xar_cart")) || { items: [] },
+
       customer: { name: "", email: "", phone: "" },
       contactForm: { name: "", email: "", phone: "", message: "" },
-
       searchQuery: "",
-      // --- FITUR BARU: STATE FILTER KATEGORI ---
-      currentCategory: "Semua", // Default menampilkan semua produk
-      // --- FITUR BARU: STATE ANIMASI KERANJANG ---
+      currentCategory: "Semua",
       isCartBouncing: false,
-      // --- DATA JSON INFO REKENING (Bisa Ditambah Sesukamu) ---
-      daftarRekening: [
-        {
-          id: 1,
-          bankName: "BLU by BCA",
-          accountNumber: "090151606623",
-          accountHolder: "Xar Project Admin",
-          teksTombolSalin: "Salin", // Menyimpan status teks tombol masing-masing bank
-        },
-      ],
-      // --- DATA PRODUK DENGAN VARIAN PREMIUM ---
-      produkItems: [
-        {
-          id: 1,
-          name: "Extrait De Parfum - Crush",
-          description:
-            "Parfum dengan konsentrasi tertinggi, memberikan aroma citrus segar yang intens digabungkan dengan sentuhan lembut vanilla dan kayu manis yang tahan lama.",
-          image: "crush.jpg",
-          specs: { category: "Extrait De Parfum", duration: "8 - 12 Jam" },
-          // PILIHAN VARIAN
-          variants: [
-            { size: "10ml", price: 50000, originalPrice: 75000 },
-            { size: "50ml", price: 140000, originalPrice: 200000 },
-          ],
-        },
-        {
-          id: 2,
-          name: "Extrait De Parfum - Sugar Cane",
-          description:
-            "Parfum dengan konsentrasi tertinggi, memberikan aroma manis gourmand yang mewah dan hangat, meninggalkan impresi elegan di setiap langkah Anda.",
-          image: "sugarcane.jpg",
-          specs: { category: "Extrait De Parfum", duration: "8 - 12 Jam" },
-          variants: [
-            { size: "10ml", price: 50000, originalPrice: 75000 },
-            { size: "50ml", price: 140000, originalPrice: 200000 },
-          ],
-        },
-        {
-          id: 3,
-          name: "Drip Bag Coffee - Arabica",
-          description:
-            "Kopi Arabica artisanal pilihan berkualitas tinggi yang diproses secara presisi, memberikan keseimbangan rasa rasa buah (fruity) yang kaya dan kompleks.",
-          image: "dripbagcoffee.jpg",
-          specs: { category: "Drip Bag Coffee", duration: "Netto: 5 x 10gr" },
-          variants: [
-            { size: "1 Pack", price: 50000, originalPrice: 70000 },
-            { size: "3 Pack (Bundling)", price: 135000, originalPrice: 210000 },
-          ],
-        },
-      ],
+      isActiveNavbar: false,
+      isActiveSearch: false,
+      isActiveCart: false,
+
+      // Standby penampung data dari JSON
+      kategoriItems: [],
+      daftarRekening: [],
+      produkItems: [],
 
       isScrolled: false,
       isActiveNavbar: false,
@@ -74,14 +31,25 @@ createApp({
       isOpenModal: false,
       selectedItem: null,
       selectedVariant: null, // MENGUNCI VARIAN YANG SEDANG DIPILIH DI MODAL
-
-      cart: { items: [] },
-      customer: { name: "", email: "", phone: "" },
-      contactForm: { name: "", email: "", phone: "", message: "" },
     };
   },
 
   mounted() {
+    // Memanggil file JSON
+    fetch("data/data.json")
+      .then((response) => {
+        if (!response.ok) throw new Error("Gagal memuat data JSON");
+        return response.json();
+      })
+      .then((data) => {
+        this.kategoriItems = data.kategoriItems;
+        this.daftarRekening = data.daftarRekening;
+        this.produkItems = data.produkItems;
+      })
+      .catch((error) => {
+        console.error("Error fetching JSON:", error);
+      });
+
     document.addEventListener("click", (e) => {
       if (!document.body.contains(e.target)) return;
       if (!e.target.closest("#hamburger") && !e.target.closest(".navbar-nav"))
@@ -102,32 +70,48 @@ createApp({
     });
   },
 
+  // WATCHER: Otomatis memantau setiap ada perubahan di keranjang untuk disimpan ke LocalStorage
+  watch: {
+    filteredProdukItems() {
+      this.$nextTick(() => {
+        this.initProductSlider();
+      });
+    },
+    cart: {
+      handler(newCart) {
+        localStorage.setItem("xar_cart", JSON.stringify(newCart));
+      },
+      deep: true, // Memastikan perubahan kuantitas/varian di dalam array ikut terpantau
+    },
+  },
+
   computed: {
     // --- PENYEMPURNAAN LIVE SEARCH + FILTER TAB KATEGORI ---
     filteredProdukItems() {
-      let produkSaringan = this.produkItems;
-
-      // 1. Saring berdasarkan Tab Kategori yang aktif
-      // Kita pakai .toLowerCase() dan .trim() agar pencocokan stringnya anti-gagal
-      if (this.currentCategory !== "Semua") {
-        produkSaringan = produkSaringan.filter((item) => {
-          return (
-            item.specs &&
-            item.specs.category.toLowerCase().trim() ===
-              this.currentCategory.toLowerCase().trim()
-          );
-        });
+      // PENGAMAN: Jika data produk dari JSON belum selesai dimuat, kembalikan array kosong
+      if (!this.produkItems || this.produkItems.length === 0) {
+        return [];
       }
 
-      // 2. Saring berdasarkan Input Pencarian (jika ada teks di kolom search)
-      if (this.searchQuery.trim()) {
-        const query = this.searchQuery.toLowerCase();
-        produkSaringan = produkSaringan.filter((item) =>
-          item.name.toLowerCase().includes(query),
+      // 1. Jika kategori yang dipilih adalah "Semua", tampilkan semua produk tanpa filter
+      if (this.currentCategory === "Semua") {
+        return this.produkItems.filter((item) =>
+          item.name.toLowerCase().includes(this.searchQuery.toLowerCase()),
         );
       }
 
-      return produkSaringan;
+      // 2. Jika memilih kategori spesifik (Parfum / Kopi), filter berdasarkan category yang cocok
+      return this.produkItems.filter((item) => {
+        // Samakan huruf besar/kecil (toLowerCase) agar aman dari typo di JSON
+        const matchCategory =
+          item.category &&
+          item.category.toLowerCase() === this.currentCategory.toLowerCase();
+        const matchSearch = item.name
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase());
+
+        return matchCategory && matchSearch;
+      });
     },
     cartTotal() {
       if (!this.cart || !this.cart.items || this.cart.items.length === 0) {
@@ -153,6 +137,61 @@ createApp({
   },
 
   methods: {
+    initProductSlider() {
+      if (this.swiperInstance) this.swiperInstance.destroy(true, true);
+
+      this.swiperInstance = new Swiper(".spotify-swiper", {
+        loop: true,
+        grabCursor: true,
+        spaceBetween: 20,
+        slidesPerView: 1,
+        centeredSlides: true, // INI KUNCI UTAMA: Memaksa slide selalu di tengah
+        speed: 500,
+        breakpoints: {
+          640: { slidesPerView: 2, centeredSlides: false }, // Kalau sudah banyak produk, bisa false agar scrolling alami
+          1024: { slidesPerView: 3, centeredSlides: false },
+          1400: { slidesPerView: 4, centeredSlides: false },
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    },
+    // Tambahkan di dalam methods: { ... }
+    getAvailableVariants(productId) {
+      const product = this.produkItems.find((p) => p.id === productId);
+      return product ? product.variants : [];
+    },
+
+    updateCartItemVariant(currentCartId, newSize) {
+      const cartItem = this.cart.items.find(
+        (item) => item.cartId === currentCartId,
+      );
+      if (!cartItem) return;
+
+      const allVariants = this.getAvailableVariants(cartItem.id);
+      const newVariantData = allVariants.find((v) => v.size === newSize);
+      if (!newVariantData) return;
+
+      const newCartId = `${cartItem.id}-${newSize}`;
+      const existingItem = this.cart.items.find(
+        (item) => item.cartId === newCartId,
+      );
+
+      if (existingItem && newCartId !== currentCartId) {
+        existingItem.quantity += cartItem.quantity;
+        existingItem.total = existingItem.quantity * existingItem.price;
+        this.cart.items = this.cart.items.filter(
+          (item) => item.cartId !== currentCartId,
+        );
+      } else {
+        cartItem.cartId = newCartId;
+        cartItem.size = newSize;
+        cartItem.price = newVariantData.price;
+        cartItem.total = cartItem.quantity * newVariantData.price;
+      }
+    },
     // --- FITUR PRESTASI: COPY TO CLIPBOARD DARI DATA JSON ---
     salinRekening(rekening) {
       // Mengambil nomor rekening secara dinamis dari object JSON yang diklik
@@ -323,16 +362,27 @@ _Mohon tunggu sebentar ya Kak, Admin kami akan segera memverifikasi ketersediaan
     },
 
     kirimPesanKontak() {
-      const teksPesan = `Halo Admin Xar Project!\nNama : ${this.contactForm.name}\nPesan : "${this.contactForm.message}"`;
+      // Menyusun format teks pesan agar mencakup semua data form
+      const teksPesan = `*📩 PESAN BARU - KONTAK KAMI*
+--------------------------------------------
+• *Nama* : ${this.contactForm.name}
+• *Email* : ${this.contactForm.email}
+• *No HP* : ${this.contactForm.phone}
+--------------------------------------------
+*💬 ISI PESAN:*
+"${this.contactForm.message}"`;
+
+      // Membuka WhatsApp dengan teks yang sudah di-encode
       window.open(
         "https://wa.me/6285171723607?text=" + encodeURIComponent(teksPesan),
         "_blank",
       );
-      this.contactForm.name =
-        this.contactForm.email =
-        this.contactForm.phone =
-        this.contactForm.message =
-          "";
+
+      // Reset semua kolom input form kembali kosong setelah dikirim
+      this.contactForm.name = "";
+      this.contactForm.email = "";
+      this.contactForm.phone = "";
+      this.contactForm.message = "";
     },
 
     rupiah(number) {

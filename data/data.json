@@ -1,0 +1,94 @@
+{
+  "kategoriItems": ["Semua", "Parfum", "Kopi"],
+  "daftarRekening": [
+    {
+      "id": 1,
+      "bankName": "BLU by BCA",
+      "accountNumber": "090151606623",
+      "accountHolder": "Xar Project Admin",
+      "teksTombolSalin": "Salin"
+    }
+  ],
+  "produkItems": [
+    {
+      "id": 1,
+      "name": "Extrait De Parfum - Crush",
+      "description": "Parfum dengan konsentrasi tertinggi, memberikan aroma citrus segar yang intens digabungkan dengan sentuhan lembut vanilla dan kayu manis yang tahan lama.",
+      "image": "crush.jpg",
+      "category": "Parfum",
+      "variants": [
+        { "size": "10ml", "price": 50000 },
+        { "size": "30ml", "price": 150000 },
+        { "size": "50ml", "price": 220000 }
+      ],
+      "specs": {
+        "category": "Citrus Gourmand",
+        "duration": "8-12 Jam"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Extrait De Parfum - Crush",
+      "description": "Parfum dengan konsentrasi tertinggi, memberikan aroma citrus segar yang intens digabungkan dengan sentuhan lembut vanilla dan kayu manis yang tahan lama.",
+      "image": "crush.jpg",
+      "category": "Parfum",
+      "variants": [
+        { "size": "10ml", "price": 50000 },
+        { "size": "30ml", "price": 150000 },
+        { "size": "50ml", "price": 220000 }
+      ],
+      "specs": {
+        "category": "Citrus Gourmand",
+        "duration": "8-12 Jam"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Extrait De Parfum - Crush",
+      "description": "Parfum dengan konsentrasi tertinggi, memberikan aroma citrus segar yang intens digabungkan dengan sentuhan lembut vanilla dan kayu manis yang tahan lama.",
+      "image": "crush.jpg",
+      "category": "Parfum",
+      "variants": [
+        { "size": "10ml", "price": 50000 },
+        { "size": "30ml", "price": 150000 },
+        { "size": "50ml", "price": 220000 }
+      ],
+      "specs": {
+        "category": "Citrus Gourmand",
+        "duration": "8-12 Jam"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Extrait De Parfum - Crush",
+      "description": "Parfum dengan konsentrasi tertinggi, memberikan aroma citrus segar yang intens digabungkan dengan sentuhan lembut vanilla dan kayu manis yang tahan lama.",
+      "image": "crush.jpg",
+      "category": "Parfum",
+      "variants": [
+        { "size": "10ml", "price": 50000 },
+        { "size": "30ml", "price": 150000 },
+        { "size": "50ml", "price": 220000 }
+      ],
+      "specs": {
+        "category": "Citrus Gourmand",
+        "duration": "8-12 Jam"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Coffee Beans - Signature Blend",
+      "description": "Biji kopi pilihan hasil roasting premium yang menghasilkan cita rasa seimbang antara acidity dan sweetness, cocok untuk menemani nongkrong asik kamu.",
+      "image": "dripbagcoffee.jpg",
+      "category": "Kopi",
+      "variants": [
+        { "size": "250g", "price": 65000 },
+        { "size": "500g", "price": 120000 },
+        { "size": "1kg", "price": 230000 }
+      ],
+      "specs": {
+        "category": "Arabica Robusta Blend",
+        "duration": "Roast Date Terbaru"
+      }
+    }
+  ]
+}
