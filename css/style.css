@@ -1025,7 +1025,7 @@ nav .search-form .search-results::-webkit-scrollbar-thumb {
    ==================================================== */
 .product {
   padding: 10rem 7% 5rem;
-  gap: 3rem;
+  gap: 10rem;
 }
 
 .product-header {
