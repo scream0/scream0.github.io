@@ -1025,6 +1025,7 @@ nav .search-form .search-results::-webkit-scrollbar-thumb {
    ==================================================== */
 .product {
   padding: 10rem 7% 5rem;
+  gap: 3rem;
 }
 
 .product-header {
@@ -1062,7 +1063,7 @@ nav .search-form .search-results::-webkit-scrollbar-thumb {
 .spotify-swiper {
   justify-content: center !important;
   padding: 40px 10px !important;
-  gap: 2rem;
+  gap: 3rem;
 }
 /* Jika produk hanya 1, batasi agar tidak memenuhi layar */
 .spotify-swiper {
