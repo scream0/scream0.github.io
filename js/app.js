@@ -149,14 +149,13 @@ createApp({
         grabCursor: true,
         spaceBetween: 3,
         slidesPerView: 1.2,
-        centeredSlides: true,
         speed: 500,
         centerInsufficientSlides: true,
 
         breakpoints: {
-          640: { slidesPerView: 1.5, centeredSlides: false },
-          1024: { slidesPerView: 2, centeredSlides: false },
-          1400: { slidesPerView: 4, centeredSlides: false },
+          640: { slidesPerView: 1.5, centerInsufficientSlides: true },
+          1024: { slidesPerView: 2, centerInsufficientSlides: true },
+          1400: { slidesPerView: 4, centerInsufficientSlides: true },
         },
         // Aktifkan kedua fitur terlebih dahulu
         navigation: {
