@@ -145,7 +145,7 @@ createApp({
       if (this.swiperInstance) this.swiperInstance.destroy(true, true);
 
       this.swiperInstance = new Swiper(".spotify-swiper", {
-        loop: true,
+        loop: false,
         grabCursor: true,
         spaceBetween: 10,
         slidesPerView: 1.2,
