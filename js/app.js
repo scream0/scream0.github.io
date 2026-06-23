@@ -147,7 +147,7 @@ createApp({
       this.swiperInstance = new Swiper(".spotify-swiper", {
         loop: true,
         grabCursor: true,
-        spaceBetween: 0,
+        spaceBetween: 3,
         slidesPerView: 1.2,
         centeredSlides: true,
         speed: 500,
