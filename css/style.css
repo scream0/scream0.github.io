@@ -1193,6 +1193,7 @@ nav .search-form .search-results::-webkit-scrollbar-thumb {
 
 .product-card {
   background: #181818;
+  margin: 1rem;
   border-radius: 12px;
   padding: 16px;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
