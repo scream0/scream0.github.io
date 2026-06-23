@@ -147,14 +147,21 @@ createApp({
       this.swiperInstance = new Swiper(".spotify-swiper", {
         loop: true,
         grabCursor: true,
-        spaceBetween: 20,
-        slidesPerView: 1,
+        spaceBetween: 0,
+        slidesPerView: 1.2,
         centeredSlides: true,
         speed: 500,
+        centerInsufficientSlides: true,
+
         breakpoints: {
-          640: { slidesPerView: 2, centeredSlides: false },
-          1024: { slidesPerView: 3, centeredSlides: false },
+          640: { slidesPerView: 1.5, centeredSlides: false },
+          1024: { slidesPerView: 2, centeredSlides: false },
           1400: { slidesPerView: 4, centeredSlides: false },
+        },
+        // Aktifkan kedua fitur terlebih dahulu
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
         },
         pagination: {
           el: ".swiper-pagination",

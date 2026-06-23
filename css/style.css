@@ -1071,6 +1071,97 @@ nav .search-form .search-results::-webkit-scrollbar-thumb {
   max-width: 1200px; /* Sesuaikan dengan lebar maksimal desainmu */
   margin: 0 auto; /* Mengunci posisi container di tengah */
 }
+/* Container Kontrol di Bawah Swiper */
+.swiper-controls-container {
+  display: flex;
+  justify-content: center;
+  align-items: center !important;
+  gap: 2rem;
+  margin-top: 25px; /* Jarak dari card produk ke tombol */
+  position: relative;
+  width: 100%;
+}
+
+/* Reset dan Desain Tombol Bulat (Desktop) */
+.spotify-swiper .swiper-button-prev,
+.spotify-swiper .swiper-button-next {
+  position: static; /* Mematikan posisi bawaan swiper yang melayang */
+  width: 42px;
+  height: 42px;
+  background-color: var(
+    --primary-color
+  ); /* Bisa diganti #1DB954 kalau mau ijo Spotify */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  color: #000000;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  margin: 0;
+}
+
+/* Mengecilkan ukuran panah di dalam bulatan */
+.spotify-swiper .swiper-button-prev::after,
+.spotify-swiper .swiper-button-next::after {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Efek Hover Tombol */
+.spotify-swiper .swiper-button-prev:hover,
+.spotify-swiper .swiper-button-next:hover {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+  transform: scale(1.05); /* Sedikit membesar biar dinamis */
+}
+
+/* Mengatur Posisi Pagination Dots (Mobile) */
+.spotify-swiper .swiper-pagination {
+  position: static;
+  width: auto;
+}
+
+/* Warna bullet aktif biar masuk tema Spotify (Hijau atau Hitam Pekat) */
+.spotify-swiper .swiper-pagination-bullet-active {
+  background: #000000; /* Ganti #1DB954 kalau mau ijo Spotify */
+  width: 18px; /* Membuat dot aktif agak lonjong elegan */
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* ======================================================= */
+/* LOGIKA RESPONSIVE (DESKTOP VS MOBILE)                   */
+/* ======================================================= */
+
+/* Skenario Mobile (Layar di bawah 768px) */
+@media (max-width: 767px) {
+  /* Sembunyikan tombol panah di HP */
+  .spotify-swiper .swiper-button-prev,
+  .spotify-swiper .swiper-button-next {
+    display: none !important;
+  }
+
+  /* Tampilkan titik pagination di HP */
+  .spotify-swiper .swiper-pagination {
+    display: block;
+  }
+}
+
+/* Skenario Desktop (Layar 768px ke atas) */
+@media (min-width: 768px) {
+  /* Sembunyikan titik pagination di Desktop */
+  .spotify-swiper .swiper-pagination {
+    display: none;
+  }
+
+  /* Tampilkan tombol bulat di Desktop */
+  .spotify-swiper .swiper-button-prev,
+  .spotify-swiper .swiper-button-next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
 /* Mengatur posisi wadah dots agar rapi di tengah bawah */
 .swiper-pagination {
   bottom: 10px !important;
